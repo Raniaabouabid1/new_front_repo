@@ -1,0 +1,10 @@
+<p>acceuil works!</p>
+
+<div *ngIf="user">
+  <h1>Welcome, {{ user.firstName }} {{ user.lastName }}!</h1>
+  <p>Your email: {{ user.email }}</p>
+</div>
+<div *ngIf="!user">
+  <p>Loading user details...</p>
+</div>
+

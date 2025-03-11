@@ -1,0 +1,65 @@
+<div class="w-full flex h-screen items-center justify-center bg-gray-100"
+     style="background: url('/backgroundblue.jpg') no-repeat center center/cover;">
+  <!-- Card Wrapper -->
+  <div class="flex w-[72%] max-w-6xl bg-white shadow-2xl rounded-2xl overflow-hidden py-[500]">
+
+    <!-- Left Side - Login Form -->
+    <div class="w-1/2 flex flex-col justify-center px-16 py-12">
+
+      <!-- Logo -->
+      <div class="mb-6 flex justify-center">
+        <img src="/logo.svg" alt="ShieldAI Logo" class="h-8">
+      </div>
+
+      <!-- Welcome Message -->
+      <h1 class="text-3xl font-bold text-black text-center mb-2">Welcome Back to Shield.Ai!</h1>
+      <p class="text-gray-500 text-lg text-center mb-6">Welcome back! Please enter your details.</p>
+
+      <form (ngSubmit)="onSubmit()">
+        <!-- Email Field -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 p-2">Email</label>
+          <div class="relative">
+            <input type="email"
+                   [(ngModel)]="credentials.email"
+                   name="email"
+                   placeholder="Enter your email"
+                   class="w-full px-12 py-3 border border-gray-300 rounded-lg shadow-sm focus:border-gray-500 focus:ring-1">
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 p-2">Password</label>
+          <div class="relative">
+            <input type="password"
+                   [(ngModel)]="credentials.password"
+                   name="password"
+                   placeholder="Enter your password"
+                   class="w-full px-12 py-3 border border-gray-300 rounded-lg shadow-sm focus:border-gray-500 focus:ring-1">
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-center mb-6">
+          <button type="submit" class="w-full max-w-xs h-12 bg-red-500 text-white text-lg font-semibold py-3 rounded-lg shadow-md hover:bg-red-600 transition">
+            Sign in
+          </button>
+        </div>
+      </form>
+
+      <!-- Forgot Password -->
+      <p class="text-center text-sm text-gray-500 mt-4">
+        Forgot Your Password?
+        <a href="#" class="text-red-500 font-medium">Retrieve Now!</a>
+      </p>
+    </div>
+
+    <!-- Right Side - Image -->
+    <div class="w-1/2 bg-gray-50 flex items-center justify-center">
+      <img src="/login.png" alt="Illustration" class="max-w-full">
+    </div>
+
+  </div>
+</div>
+

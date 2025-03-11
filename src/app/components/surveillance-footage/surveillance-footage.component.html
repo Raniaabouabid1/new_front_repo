@@ -1,0 +1,71 @@
+<div class="flex h-screen">
+  <!-- Sidebar -->
+  <app-sidebar class="h-full w-20 hover:w-1/5 transition-all"></app-sidebar>
+
+  <!-- Main Content -->
+  <div class="py-4 px-16 flex-1 flex flex-col overflow-y-auto">
+
+    <!-- Filters -->
+    <div class="flex justify-center space-x-4 mb-6">
+      <button *ngFor="let category of categories"
+              (click)="filterCategory(category)"
+              [class.bg-[#2e2e48]]="selectedCategory === category"
+              [class.text-white]="selectedCategory === category"
+              class="px-[46px] py-2 rounded-md border border-gray-300 text-white hover:bg-[#464667] transition">
+        {{ category }}
+      </button>
+    </div>
+
+    <!-- Card Wrapper for Aesthetic Look -->
+    <div class="shadow-2xl rounded-lg bg-white">
+
+      <!-- Footage Sections (Each Section is a Carousel) -->
+      <div *ngFor="let section of filteredFootage" class="px-10 mb-12">
+        <h2 class="text-xl font-semibold mb-4">{{ section.name }}</h2>
+
+        <!-- Carousel Wrapper -->
+        <div class="relative flex justify-center">
+          <div class="overflow-hidden">
+            <div class="flex gap-4 transition-transform duration-300"
+                 [style.transform]="'translateX(-' + carouselPosition[section.name] + 'px)'">
+
+              <!-- Camera Card -->
+              <div *ngFor="let camera of section.cameras"
+                   class="min-w-[400px] max-w-[600px] bg-black rounded-xl overflow-hidden shadow-lg flex-shrink-0">
+
+                <!-- Live Video Feed -->
+                <video class="w-full h-48 object-cover opacity-90" autoplay muted loop>
+                  <source [src]="camera.liveFeedUrl" type="video/mp4">
+                  Your browser does not support live video.
+                </video>
+
+                <!-- Overlay Icons -->
+                <div class="absolute top-2 left-2 flex space-x-2">
+                  <span class="material-icons text-white text-sm">wifi</span>
+                </div>
+                <div class="absolute top-2 right-2 text-white text-sm font-semibold">{{ camera.viewers }}</div>
+
+                <!-- Camera Info -->
+                <div class="absolute bottom-2 left-2 text-white text-xs">
+                  <p class="font-semibold">{{ camera.name }}</p>
+                  <p>{{ camera.date }} &bull; {{ camera.time }}</p>
+                </div>
+
+                <!-- Menu Icon -->
+                <button class="absolute top-2 right-2 text-white text-sm">
+                  <span class="material-icons">more_vert</span>
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Navigation Buttons -->
+          <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full" (click)="prevSlide(section.name)">‹</button>
+          <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full" (click)="nextSlide(section.name)">›</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+
+input, select {
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+input:focus, select:focus {
+  border: 1px solid #3b82f6;
+}

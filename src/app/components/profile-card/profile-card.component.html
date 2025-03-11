@@ -1,0 +1,86 @@
+<div class="flex  h-screen ">
+
+  <!-- Main Content (User Profile) -->
+  <div class="p-6 flex flex-1 justify-center">
+    <div class="w-full max-w-5xl  text-gray-800 rounded-lg p-6 sm:p-8 shadow-2xl">
+
+      <!-- Profile Header -->
+      <div class="flex flex-wrap items-center justify-between border-b pb-4">
+        <div class="flex items-center gap-4">
+          <img src="/avatar.svg" alt="Profile Picture" class="w-20 h-20 rounded-full border-2 border-blue-500" />
+          <div>
+            <h2 class="text-2xl font-semibold">John Doe</h2>
+            <p class="text-sm text-gray-600">johndoe&#64;example.com</p>
+            <span class="inline-block bg-red-600 text-xs px-3 py-1 rounded mt-1 text-white">Administrator</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Information (Two-column Layout) -->
+      <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Left Column -->
+        <div class="space-y-4">
+          <!-- Full Name -->
+          <div>
+            <label class="block text-sm text-gray-600 py-3">Full Name</label>
+            <div class="flex gap-2">
+              <input type="text" class="bg-white px-3 py-2 w-1/2 rounded border border-gray-300 focus:border-blue-500 outline-none" placeholder="First Name" />
+              <input type="text" class="bg-white px-3 py-2 w-1/2 rounded border border-gray-300 focus:border-blue-500 outline-none" placeholder="Last Name" />
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label class="block text-sm text-gray-600 py-3">Email Address</label>
+            <div class="flex items-center bg-white px-3 py-2 rounded border border-gray-300">
+              <span class="text-gray-500">📧</span>
+              <input type="email" class="bg-transparent w-full ml-2 outline-none" placeholder="Email" />
+            </div>
+          </div>
+
+          <!-- Phone Number -->
+          <div>
+            <label class="block text-sm text-gray-600 py-3">Phone Number</label>
+            <input type="text" class="bg-white px-3 py-2 w-full rounded border border-gray-300 focus:border-blue-500 outline-none" placeholder="+212600000000" />
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-4">
+          <!-- Birth Date -->
+          <div>
+            <label class="block text-sm text-gray-600 py-3">Birth Date</label>
+            <input type="date" class="bg-white px-3 py-2 w-full rounded border border-gray-300 focus:border-blue-500 outline-none" />
+          </div>
+
+          <!-- Role -->
+          <div>
+            <label class="block text-sm text-gray-600 py-3">Role</label>
+            <select class="bg-white px-3 py-2 w-full rounded border border-gray-300">
+              <option>Administrator</option>
+              <option>User</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-600 py-3"> List of Assigned Sections </label>
+            <select class="bg-white px-3 py-2 w-full rounded border border-gray-300">
+              <option>Gate A12</option>
+              <option>Section A north</option>
+              <option>Hallway 123</option>
+              <option>Gate A12</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="mt-6 flex  py-10">
+        <button class="bg-green-600 px-6 py-2 rounded text-white text-sm hover:bg-green-800">
+          Edit Personal Information
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

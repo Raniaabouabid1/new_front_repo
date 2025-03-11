@@ -1,0 +1,61 @@
+<aside class="h-screen w-20 hover:w-64 bg-[#2E2E48] text-white flex flex-col py-4 rounded-r-xl shadow-lg transition-all duration-300 group relative">
+
+  <!-- Logo -->
+  <div class="w-full flex justify-center px-4 transition-all duration-300">
+    <div class="flex items-center gap-1">
+      <img src="/shieldAilogo1.svg" alt="Shield.AI Icon" class="w-8 h-8 transition-all duration-300 group-hover:w-10 group-hover:h-10" />
+      <img src="/sheildAi.svg" alt="Shield.AI Text" class="w-0 opacity-0 group-hover:opacity-100 group-hover:w-32 transition-all duration-300" />
+    </div>
+  </div>
+
+  <!-- Profile Picture Avatar -->
+  <div class="w-full flex flex-col items-center px-3 transition-all duration-300 group mt-4">
+    <a routerLink="/profile" class="flex items-center justify-center w-12 h-12 group-hover:w-20 group-hover:h-20 bg-[#464667] rounded-full transition-all duration-300">
+      <img src="/profileAvatar.png"
+           class="w-10 h-10 rounded-full transition-all duration-300 group-hover:w-16 group-hover:h-16">
+    </a>
+    <!-- Name & Role -->
+    <div class="mt-2 text-center transition-all duration-300 opacity-0 group-hover:opacity-100">
+      <p class="text-sm font-semibold">John Doe</p>
+      <p class="text-xs text-gray-300">Administrator</p>
+    </div>
+  </div>
+
+  <!-- Navigation (Centered using flex-1) -->
+  <nav class="flex flex-col items-start w-full flex-1 justify-center space-y-2 mt-2 ">
+
+    <a routerLink="/dashboard" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
+      <span class="material-icons text-xl transition-all duration-300 group-hover:translate-x-1">dashboard</span>
+      <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Dashboard</span>
+    </a>
+
+    <a routerLink="/users" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
+      <span class="material-icons text-xl transition-all duration-300 group-hover:translate-x-1">groups</span>
+      <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Users</span>
+    </a>
+
+    <a routerLink="/footages" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
+      <span class="material-icons text-xl transition-all duration-300 group-hover:translate-x-1">camera</span>
+      <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Footage</span>
+    </a>
+
+    <a routerLink="/logs" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
+      <span class="material-icons text-xl transition-all duration-300 group-hover:translate-x-1">format_list_bulleted</span>
+      <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Log Reports</span>
+    </a>
+
+    <a routerLink="/alerts" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
+      <span class="material-icons text-xl transition-all duration-300 group-hover:translate-x-1">notifications</span>
+      <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Alerts</span>
+    </a>
+  </nav>
+
+  <!-- Logout Button (Fixed at Bottom) -->
+  <div class="w-full flex justify-center pb-4 py-20">
+    <button class="flex items-center justify-center bg-[#FFFFFF] text-[#F31018] w-10 h-10 rounded-xl shadow-md transition-all duration-300 overflow-hidden group-hover:w-32 px-4">
+      <span class="material-icons text-lg flex-shrink-0">logout</span>
+      <span class="ml-2 text-sm opacity-0 group-hover:opacity-100 group-hover:w-auto w-0 transition-all duration-300 whitespace-nowrap">Logout</span>
+    </button>
+  </div>
+
+</aside>
