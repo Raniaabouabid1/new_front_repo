@@ -1,22 +1,28 @@
-import {RouterModule, Routes} from '@angular/router';
-import {LogintestComponent} from './components/logintest/logintest.component';
-import {AcceuilComponent} from './components/acceuil/acceuil.component';
-import {NgModule} from '@angular/core';
-import {SurveillanceFootageComponent} from './components/surveillance-footage/surveillance-footage.component';
-import {ProfileCardComponent} from './components/profile-card/profile-card.component';
+
+
+import { Routes} from '@angular/router';
+import { LoginLayoutComponent } from './components/layouts/login-layout.component';
+import { MainLayoutComponent } from './components/layouts/main-layout.component';
+import { LogintestComponent } from './components/logintest/logintest.component';
+import { ProfileCardComponent } from './components/profile-card/profile-card.component';
+import { SurveillanceFootageComponent } from './components/surveillance-footage/surveillance-footage.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LogintestComponent },
-  { path: 'acceuil', component: AcceuilComponent },
-  { path: 'footages', component: SurveillanceFootageComponent },
-  { path: 'profile', component: ProfileCardComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-
+  {
+    path: '',
+    component: LoginLayoutComponent,
+    children: [
+      { path: 'login', component: LogintestComponent },
+      { path: '', redirectTo: 'login', pathMatch: 'full' }
+    ]
+  },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { path: 'profile', component: ProfileCardComponent },
+      { path: 'footages', component: SurveillanceFootageComponent },
+      // other authenticated routes
+    ]
+  }
 ];
-
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoginService, LoginRequest } from './logintest.component.service';
-import {LoginResponse} from '../login/login.service';
+import {LoginResponse} from './logintest.component.service';
 import { Router } from '@angular/router';
 
 
@@ -30,10 +30,6 @@ export class LogintestComponent {
       next: (response: LoginResponse) => {
         console.log('JWT Token:', response.token);
         localStorage.setItem('jwt', response.token);
-        // Navigate to the accueil (home) page after successful login
-/*
-        this.router.navigate(['/acceuil']);
-*/
       },
       error: err => console.error('Login failed', err)
     });
