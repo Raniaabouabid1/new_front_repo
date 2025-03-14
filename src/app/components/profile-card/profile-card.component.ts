@@ -1,30 +1,49 @@
-import { Component } from '@angular/core';
-import {SidebarComponent} from '../sidebar/sidebar.component';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import {jwtDecode} from 'jwt-decode';
+interface JwtPayload {
+  sub: string;
+  iat: number;
+  exp: number;
+}
 
 @Component({
   selector: 'app-profile-card',
   templateUrl: './profile-card.component.html',
-  imports: [
-    SidebarComponent
-  ],
-  styleUrls: ['./profile-card.component.scss']
+  styleUrls: ['./profile-card.component.scss'],
+  standalone: true
 })
 export class ProfileCardComponent {
-  user = {
-    firstName: 'Sienna',
-    lastName: 'Hewitt',
-    email: 'siennahewitt@gmail.com',
-    country: '🇺🇸 United States',
-    username: 'siennahewitt'
-  };
+  user: any = {};
 
-  saveChanges() {
-    console.log('Changes saved:', this.user);
-    alert('Profile updated successfully!');
-  }
+  constructor(private http: HttpClient) {}
 
-  archiveUser() {
-    console.log('User archived:', this.user);
-    alert('User has been archived.');
+  ngOnInit(): void {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      try {
+        const decoded = jwtDecode<JwtPayload>(token);
+        const userId = decoded.sub;
+        console.log('Extracted user ID from token:', userId);
+
+        console.log(`http://localhost:8080/api/users/${userId}`);
+
+
+        // Use the extracted user ID to fetch the profile
+        this.http.get(`http://localhost:8080/api/users/${userId}`)
+          .subscribe({
+            next: data => {
+              this.user = data;
+            },
+            error: err => {
+              console.error('Error fetching user data:', err);
+            }
+          });
+      } catch (error) {
+        console.error('Error decoding JWT:', error);
+      }
+    } else {
+      console.error('No JWT token found in localStorage.');
+    }
   }
 }

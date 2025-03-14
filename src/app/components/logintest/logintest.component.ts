@@ -30,9 +30,13 @@ export class LogintestComponent {
       next: (response: LoginResponse) => {
         console.log('JWT Token:', response.token);
         localStorage.setItem('jwt', response.token);
+
+        // Redirect to the profile page after successful login
+        this.router.navigate(['/profile']);
       },
       error: err => console.error('Login failed', err)
     });
   }
+
 
 }

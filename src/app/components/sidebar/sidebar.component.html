@@ -10,7 +10,7 @@
 
   <!-- Profile Picture Avatar -->
   <div class="w-full flex flex-col items-center px-3 transition-all duration-300 group mt-4">
-    <a routerLink="/profile" class="flex items-center justify-center w-12 h-12 group-hover:w-20 group-hover:h-20 bg-[#464667] rounded-full transition-all duration-300">
+    <a [routerLink]="['/profile']" class="flex items-center justify-center w-12 h-12 group-hover:w-20 group-hover:h-20 bg-[#464667] rounded-full transition-all duration-300">
       <img src="/profileAvatar.png"
            class="w-10 h-10 rounded-full transition-all duration-300 group-hover:w-16 group-hover:h-16">
     </a>
@@ -50,12 +50,13 @@
     </a>
   </nav>
 
-  <!-- Logout Button (Fixed at Bottom) -->
-  <div class="w-full flex justify-center pb-4 py-20">
-    <button class="flex items-center justify-center bg-[#FFFFFF] text-[#F31018] w-10 h-10 rounded-xl shadow-md transition-all duration-300 overflow-hidden group-hover:w-32 px-4">
-      <span class="material-icons text-lg flex-shrink-0">logout</span>
-      <span class="ml-2 text-sm opacity-0 group-hover:opacity-100 group-hover:w-auto w-0 transition-all duration-300 whitespace-nowrap">Logout</span>
-    </button>
-  </div>
+    <!-- Logout Button -->
+    <div class="w-full flex justify-center pb-4 py-20">
+      <button (click)="logout()" class="flex items-center justify-center bg-[#FFFFFF] text-[#F31018] w-10 h-10 rounded-xl shadow-md transition-all duration-300 overflow-hidden group-hover:w-32 px-4">
+        <span class="material-icons text-lg flex-shrink-0">logout</span>
+        <span class="ml-2 text-sm opacity-0 group-hover:opacity-100 group-hover:w-auto w-0 transition-all duration-300 whitespace-nowrap">Logout</span>
+      </button>
+    </div>
+
 
 </aside>

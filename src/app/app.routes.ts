@@ -13,6 +13,7 @@ export const routes: Routes = [
     component: LoginLayoutComponent,
     children: [
       { path: 'login', component: LogintestComponent },
+      { path: 'profile/:id', component: ProfileCardComponent },
       { path: '', redirectTo: 'login', pathMatch: 'full' }
     ]
   },
@@ -22,6 +23,7 @@ export const routes: Routes = [
     children: [
       { path: 'profile', component: ProfileCardComponent },
       { path: 'footages', component: SurveillanceFootageComponent },
+      { path: '', redirectTo: '/login', pathMatch: 'full' }
       // other authenticated routes
     ]
   }
