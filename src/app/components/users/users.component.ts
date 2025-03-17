@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './users.component.service';  // Correct service import
 import { IUser } from './users.component.service';
-import {DatePipe, NgClass, NgForOf} from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import {DeleteUserModalComponent} from '../delete-user-modal/delete-user-modal.component';
 
 @Component({
@@ -11,7 +11,10 @@ import {DeleteUserModalComponent} from '../delete-user-modal/delete-user-modal.c
     NgClass,
     NgForOf,
     DatePipe,
-    DeleteUserModalComponent
+    DeleteUserModalComponent,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault
   ],
   styleUrls: ['./users.component.css']
 })

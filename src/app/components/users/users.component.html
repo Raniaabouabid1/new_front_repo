@@ -3,7 +3,16 @@
   <div class="px-7 pt-5 overflow-auto">
     <table class="px-7 pt-5 w-full border-collapse border border-gray-200 shadow-sm rounded-lg overflow-hidden">
       <thead class="bg-[#2e2e48] text-white">
-      <!-- ... table headers ... -->
+      <tr>
+        <th class="p-4 text-left"></th>
+        <th class="p-4 text-left">First name</th>
+        <th class="p-4 text-left">Last Name</th>
+        <th class="p-4 text-left">Birth of birth</th>
+        <th class="p-4 text-left">Role</th>
+        <th class="p-4 text-left">Email</th>
+        <th class="p-4 text-left">Phone Number</th>
+        <th class="p-4 text-center">Actions</th>
+      </tr>
       </thead>
       <tbody>
       <tr *ngFor="let user of users" class="bg-gray-100 hover:bg-gray-200 transition-all">
@@ -16,7 +25,17 @@
         <td class="p-4">{{ user.lastName }}</td>
         <td class="p-4">{{ user.birthDate | date }}</td>
         <td class="p-4">
-          <!-- ... user role display ... -->
+          <span [ngSwitch]="user.roleName">
+              <span *ngSwitchCase="'ROLE_SECURITY_AGENT'" class="bg-red-300 rounded px-2 py-1">
+                Security Agent
+              </span>
+              <span *ngSwitchCase="'ROLE_ADMIN'" class="bg-green-200 rounded px-2 py-1">
+                Administrator
+              </span>
+              <span *ngSwitchDefault class="bg-red-900 rounded px-2 py-1">
+                Unknown
+              </span>
+            </span>
         </td>
         <td class="p-4">{{ user.email }}</td>
         <td class="p-4">{{ user.phoneNumber }}</td>
