@@ -1,0 +1,71 @@
+<!-- Show the modal only if "show" is true -->
+<div
+  *ngIf="show"
+  class="fixed top-0 right-0 left-0 z-50 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-50"
+>
+  <div class="relative p-4 w-full max-w-4xl h-full md:h-auto bg-white rounded-lg shadow">
+    <!-- Modal content -->
+    <div class="p-4 text-center">
+      <!-- Close Button -->
+      <button
+        type="button"
+        (click)="onCancel()"
+        class="text-gray-400 absolute top-2.5 right-2.5 bg-transparent hover:bg-gray-200 rounded-lg p-1.5"
+      >
+        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor">
+          <!-- your close icon -->
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+
+      <!-- Icon or heading -->
+      <svg class="text-[#2e2e48] w-11 h-11 mb-3.5 mx-auto">
+        <!-- some icon -->
+      </svg>
+
+      <p class="mb-4 text-gray-500">
+        Are you sure you want to delete this user?
+      </p>
+
+      <!-- User details table -->
+      <div class="overflow-x-auto shadow-lg sm:rounded-lg mb-5">
+        <table class="w-full text-sm text-center text-white bg-white">
+          <thead class="text-xs uppercase border-b border-[#bab8b9]">
+          <tr>
+            <th scope="col" class="px-6 py-2 bg-[#bab8b9] border-b border-white">Full Name</th>
+            <th scope="col" class="px-6 py-2 text-[#bab8b9]">Email</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="border-b border-[#bab8b9]">
+            <td class="px-6 py-3 font-medium bg-[#bab8b9]">
+              {{ user?.firstName }} {{ user?.lastName }}
+            </td>
+            <td class="px-6 py-3 text-[#bab8b9]">
+              {{ user?.email }}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Confirm / Cancel buttons -->
+      <div class="flex justify-center items-center space-x-4">
+        <button
+          type="button"
+          (click)="onConfirm()"
+          class="py-2 px-3 bg-[#B10C74] text-white rounded-lg"
+        >
+          Yes, I am sure.
+        </button>
+        <button
+          type="button"
+          (click)="onCancel()"
+          class="py-2 px-3 bg-[#313863] text-white rounded-lg"
+        >
+          No, Cancel.
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

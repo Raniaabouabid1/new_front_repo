@@ -1,0 +1,47 @@
+<!-- users.component.html -->
+<div class="flex h-screen">
+  <div class="px-7 pt-5 overflow-auto">
+    <table class="px-7 pt-5 w-full border-collapse border border-gray-200 shadow-sm rounded-lg overflow-hidden">
+      <thead class="bg-[#2e2e48] text-white">
+      <!-- ... table headers ... -->
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of users" class="bg-gray-100 hover:bg-gray-200 transition-all">
+        <td class="p-4 text-left">
+          <button class="hover:opacity-80 viewBtns" type="button">
+            <img src="/eye.png" alt="Voir" class="h-6 w-6" />
+          </button>
+        </td>
+        <td class="p-4">{{ user.firstName }}</td>
+        <td class="p-4">{{ user.lastName }}</td>
+        <td class="p-4">{{ user.birthDate | date }}</td>
+        <td class="p-4">
+          <!-- ... user role display ... -->
+        </td>
+        <td class="p-4">{{ user.email }}</td>
+        <td class="p-4">{{ user.phoneNumber }}</td>
+        <td class="p-4 flex items-center justify-center gap-3">
+          <!-- Edit Button -->
+          <button class="hover:opacity-80 modBtns" type="button">
+            <img src="/edit.png" alt="Modifier" class="h-6 w-6" />
+          </button>
+
+          <!-- Delete Button -->
+          <button class="hover:opacity-80 deleteBtns" (click)="openDeleteModal(user)">
+            <img src="/trash.png" alt="Supprimer" class="h-6 w-6" />
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<app-delete-user-modal
+  [user]="selectedUser"
+  [show]="showDeleteModal"
+  (confirmDelete)="confirmDelete()"
+  (cancel)="closeDeleteModal()"
+>
+</app-delete-user-modal>

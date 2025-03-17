@@ -1,19 +1,29 @@
-<!-- profile.component.html -->
-<div class="flex h-screen">
-  <div class="p-6 flex flex-1 justify-center">
-    <div class="w-full max-w-5xl text-gray-800 rounded-lg p-6 sm:p-8 shadow-2xl">
-
+<div class="max-h-screen flex flex-col">
+  <!-- Main Content -->
+  <div class="flex flex-1 items-center justify-center">
+    <div class="w-full max-w-7xl bg-white text-gray-800 rounded-lg py-6 sm:p-8 shadow-2xl">
       <!-- Profile Header -->
       <div class="flex flex-wrap items-center justify-between border-b pb-4">
         <div class="flex items-center gap-4">
-          <img src="/avatar.svg" alt="Profile Picture" class="w-20 h-20 rounded-full border-2 border-blue-500" />
+          <div class="relative w-20 h-20">
+            <img [src]="user.profileImage ? user.profileImage : '/avatar.svg'" alt="Profile Picture"
+                 class="w-full h-full rounded-full border-2 border-blue-500" />
+
+            <!-- File Upload Input (Hidden) -->
+            <input type="file" #fileInput accept="image/*" (change)="uploadProfileImage($event)" hidden>
+
+            <!-- Plus Icon (Click to trigger file selection) -->
+            <button (click)="fileInput.click()"
+                    class="absolute bottom-0 left-0 bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-green-700">
+              +
+            </button>
+          </div>
+
           <div>
             <h2 class="text-2xl font-semibold">
               {{ user.firstName }} {{ user.lastName }}
             </h2>
-            <p class="text-sm text-gray-600">
-              {{ user.email }}
-            </p>
+            <p class="text-sm text-gray-600">{{ user.email }}</p>
             <span class="inline-block bg-red-600 text-xs px-3 py-1 rounded mt-1 text-white">
               {{ user.roleName }}
             </span>
@@ -30,22 +40,29 @@
             <label class="block text-sm text-gray-600 py-3">Full Name</label>
             <div class="flex gap-2">
               <input type="text"
-                     class="bg-white px-3 py-2 w-1/2 rounded border border-gray-300"
-                     [value]="user.firstName">
+                     [readonly]="!editMode"
+                     class="px-3 py-2 w-1/2 rounded border border-gray-300"
+                     [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}"
+                     [(ngModel)]="user.firstName">
               <input type="text"
-                     class="bg-white px-3 py-2 w-1/2 rounded border border-gray-300"
-                     [value]="user.lastName">
+                     [readonly]="!editMode"
+                     class="px-3 py-2 w-1/2 rounded border border-gray-300"
+                     [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}"
+                     [(ngModel)]="user.lastName"
+              >
             </div>
           </div>
 
           <!-- Email -->
           <div>
             <label class="block text-sm text-gray-600 py-3">Email Address</label>
-            <div class="flex items-center bg-white px-3 py-2 rounded border border-gray-300">
-              <span class="text-gray-500">📧</span>
+            <div class="flex items-center rounded border border-gray-300">
               <input type="email"
-                     class="bg-transparent w-full ml-2 outline-none"
-                     [value]="user.email">
+                     [readonly]="!editMode"
+                     class="w-full ml-2 outline-none px-3 py-2 rounded"
+                     [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}"
+                     [(ngModel)]="user.email"
+              >
             </div>
           </div>
 
@@ -53,8 +70,19 @@
           <div>
             <label class="block text-sm text-gray-600 py-3">Phone Number</label>
             <input type="text"
-                   class="bg-white px-3 py-2 w-full rounded border border-gray-300"
-                   [value]="user.telephone">
+                   [readonly]="!editMode"
+                   class="px-3 py-2 w-full rounded border border-gray-300"
+                   [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}"
+                   [(ngModel)]="user.telephone">
+          </div>
+
+          <!-- Change Password -->
+          <div>
+            <label [ngClass]="{'': editMode, 'hidden': !editMode}" class="block text-sm text-gray-600 py-3">Change Password</label>
+            <input type="password" placeholder="Enter your new password"
+                   [ngClass]="{'bg-gray-50': editMode, 'hidden': !editMode}"
+                   class="px-3 py-2 w-full rounded border border-gray-300"
+                   [(ngModel)]="newPassword">
           </div>
         </div>
 
@@ -64,40 +92,55 @@
           <div>
             <label class="block text-sm text-gray-600 py-3">Birth Date</label>
             <input type="date"
-                   class="bg-white px-3 py-2 w-full rounded border border-gray-300"
-                   [value]="user.birthDate">
+                   [readonly]="!editMode"
+                   class="px-3 py-2 w-full rounded border border-gray-300"
+                   [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}"
+                   [(ngModel)]="user.birthDate"
+            >
           </div>
 
-          <!-- Role -->
+          <!-- Role (Always Read-Only) -->
           <div>
             <label class="block text-sm text-gray-600 py-3">Role</label>
-            <select class="bg-white px-3 py-2 w-full rounded border border-gray-300">
-              <option [selected]="user.roleName === 'Administrator'">Administrator</option>
-              <option [selected]="user.roleName === 'User'">User</option>
-            </select>
+            <div [ngSwitch]="user.roleName">
+              <select class="bg-gray-200 px-3 py-2 w-full rounded border border-gray-300" disabled>
+                <option *ngSwitchCase="'ROLE_SECURITY_AGENT'" selected>Security Agent</option>
+                <option *ngSwitchCase="'ROLE_ADMIN'" selected>Administrator</option>
+                <option *ngSwitchDefault selected>Unknown</option>
+              </select>
+            </div>
           </div>
 
-          <!-- Assigned Section(s) -->
-         <!-- <div>
-            <label class="block text-sm text-gray-600 py-3">List of Assigned Sections</label>
-            <select class="bg-white px-3 py-2 w-full rounded border border-gray-300">
-              <option *ngIf="user.sectionName" [selected]="true">{{ user.sectionName }}</option>
-              <option>Gate A12</option>
-              <option>Section A north</option>
-              <option>Hallway 123</option>
-              &lt;!&ndash; ... or generate from an array if you have multiple sections ... &ndash;&gt;
-            </select>
-          </div>-->
+          <!-- Assigned Section (Always Read-Only) -->
+          <div>
+            <label class="block text-sm text-gray-600 py-3">Assigned Section</label>
+            <input type="text" readonly
+                   class="bg-gray-200 px-3 py-2 w-full rounded border border-gray-300"
+                   [value]="user.assignedSection ? user.assignedSection : 'No assigned section'">
+          </div>
+
+          <!-- Confirm Password -->
+          <div>
+            <label [ngClass]="{'': editMode, 'hidden': !editMode}" class="block text-sm text-gray-600 py-3">Confirm Password</label>
+            <input type="password" placeholder="Confirm your new password"
+                   [ngClass]="{'bg-gray-50': editMode, 'hidden': !editMode}"
+                   class="px-3 py-2 w-full rounded border border-gray-300"
+                   [(ngModel)]="confirmPassword"
+                   (input)="validatePasswords()">
+            <p class="text-red-500 text-sm mt-1" *ngIf="passwordMismatch">
+              Passwords do not match!
+            </p>
         </div>
       </div>
 
-      <!-- Actions -->
-      <div class="mt-6 flex py-10">
-        <button class="bg-green-600 px-6 py-2 rounded text-white text-sm hover:bg-green-800">
-          Edit Personal Information
+      <!-- Actions (Button inside the card) -->
+      <div class="mt-6">
+        <button (click)="editMode ? saveChanges() : toggleEditMode()"
+                class="bg-green-600 px-6 py-2 rounded text-white text-sm hover:bg-green-800">
+          {{ editMode ? 'Save Changes' : 'Edit Personal Information' }}
         </button>
       </div>
-
     </div>
   </div>
+</div>
 </div>

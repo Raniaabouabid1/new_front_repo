@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProfileCardComponent } from './profile-card.component';
+import { DeleteUserModalComponent } from './delete-user-modal.component';
 
-describe('ProfileCardComponent', () => {
-  let component: ProfileCardComponent;
-  let fixture: ComponentFixture<ProfileCardComponent>;
+describe('DeleteUserModalComponent', () => {
+  let component: DeleteUserModalComponent;
+  let fixture: ComponentFixture<DeleteUserModalComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProfileCardComponent]
+      imports: [DeleteUserModalComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ProfileCardComponent);
+    fixture = TestBed.createComponent(DeleteUserModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
