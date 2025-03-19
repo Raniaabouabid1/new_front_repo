@@ -1,0 +1,95 @@
+<div *ngIf="show" id="userModal" tabindex="-1"
+     aria-hidden="true"
+     class="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-full bg-gray-800 bg-opacity-50">
+  <div class="relative p-4 w-1/2 max-w-2xl">
+    <div class="relative bg-white rounded-lg shadow max-h-[90vh] overflow-hidden">
+      <!-- Modal header -->
+      <div class="flex p-4 border-b rounded-t border-gray-600">
+        <h3 id="modalTitle" class="text-3xl font-bold text-gray-900">Add a New User</h3>
+        <button type="button"
+                (click)="onClose()"
+                class="ml-auto bg-transparent hover:bg-[#B10C74] hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+               viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <!-- Modal body with form -->
+      <div class="p-4 overflow-y-auto" style="max-height: calc(90vh - 150px);">
+        <form id="userModalForm" (ngSubmit)="onSubmit(userForm.value)" #userForm="ngForm">
+          <!-- First Name and Last Name on the same line -->
+          <div class="px-3 flex space-x-1">
+            <div class="w-1/2">
+              <label for="firstName" class="block mb-2 font-medium">First name</label>
+              <input type="text" name="firstName" id="firstName" required placeholder="Enter first name"
+                     class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+            </div>
+            <div class="w-1/2">
+              <label for="lastName" class="block mb-2 font-medium">Last name</label>
+              <input type="text" name="lastName" id="lastName" required placeholder="Enter last name"
+                     class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+            </div>
+          </div>
+
+          <!-- Birth Date -->
+          <div class="px-3 pb-3 mt-4">
+            <label for="birthDate" class="block mb-2 font-medium">Birth day</label>
+            <input type="date" name="birthDate" id="birthDate" required placeholder="Enter birth date"
+                   class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+          </div>
+
+          <!-- Email -->
+          <div class="px-3 pb-3">
+            <label for="email" class="block mb-2 font-medium">E-mail</label>
+            <input type="email" name="email" id="email" required placeholder="Enter e-mail"
+                   class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+          </div>
+
+          <!-- Role -->
+          <div class="px-3 pb-3">
+            <label for="role" class="block mb-2 font-medium">Select Role</label>
+            <select name="role" id="role" required class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel>
+              <option value="ROLE_SECURITY_AGENT">Security Agent</option>
+              <option value="ROLE_ADMIN">Administrator</option>
+            </select>
+          </div>
+
+          <!-- Phone Number -->
+          <div class="px-3 pb-3">
+            <label for="phoneNumber" class="block mb-2 font-medium">Phone number</label>
+            <input type="text" name="phoneNumber" id="phoneNumber" required placeholder="Enter phone number"
+                   class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+          </div>
+
+          <!-- Password and Confirm Password on the same line -->
+          <div class="px-3 flex space-x-4 mt-4">
+            <div class="w-1/2">
+              <label for="password" class="block mb-2 font-medium">Password</label>
+              <input type="password" name="password" id="password" required placeholder="Enter password"
+                     class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+            </div>
+            <div class="w-1/2">
+              <label for="confirmPsw" class="block mb-2 font-medium">Confirm password</label>
+              <input type="password" name="confirmPsw" id="confirmPsw" required placeholder="Confirm password"
+                     class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!-- Modal footer -->
+      <div class="flex items-center justify-center p-4 border-t rounded-b">
+        <button type="submit" form="userModalForm" id="confirmBtn"
+                class="w-1/4 bg-[#313863] text-white font-bold py-3 px-6 m-2 rounded hover:bg-[#5663af]">
+          Confirm
+        </button>
+        <button type="button" (click)="onClose()"
+                class="w-1/4 bg-red-600 hover:bg-red-800 text-white m-2 font-bold py-3 px-6 rounded">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

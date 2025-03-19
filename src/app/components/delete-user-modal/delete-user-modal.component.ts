@@ -19,12 +19,10 @@ export class DeleteUserModalComponent {
   @Output() cancel = new EventEmitter<void>();
 
   onConfirm(): void {
-    // Emit the event that the user confirmed the deletion
     this.confirmDelete.emit();
   }
 
   onCancel(): void {
-    // Emit the event that the user canceled the deletion
     this.cancel.emit();
   }
 }

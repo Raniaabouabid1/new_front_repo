@@ -5,7 +5,6 @@ import { NgForOf } from '@angular/common';
 @Component({
   selector: 'app-surveillance-footage',
   imports: [
-    SidebarComponent,
     NgForOf
   ],
   templateUrl: './surveillance-footage.component.html',

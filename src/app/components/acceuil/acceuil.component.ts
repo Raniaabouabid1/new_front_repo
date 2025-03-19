@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import {NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-acceuil',
   standalone: true,
   templateUrl: './acceuil.component.html',
   styleUrls: ['./acceuil.component.css'],
-  imports: []  // any necessary modules, e.g., CommonModule
+  imports: [
+    NgIf
+  ]  // any necessary modules, e.g., CommonModule
 })
 export class AcceuilComponent implements OnInit {
   user: any;

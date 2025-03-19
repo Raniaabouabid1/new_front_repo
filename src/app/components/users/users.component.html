@@ -1,7 +1,45 @@
-<!-- users.component.html -->
-<div class="flex h-screen">
-  <div class="px-7 pt-5 overflow-auto">
-    <table class="px-7 pt-5 w-full border-collapse border border-gray-200 shadow-sm rounded-lg overflow-hidden">
+<div class="flex h-screen" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+
+  <div class="w-full max-w-7xl px-7 pt-5 overflow-auto">
+    <section class="px-7 py-4 pr-8  flex justify-between items-center">
+      <h2 class="text-3xl font-medium text-gray-800">List of Users </h2>
+      <button (click)="openUserModal()" class="py-2 px-3 bg-[#313863] text-white rounded-lg">
+        + Add a new User
+      </button>
+    </section><section>
+    <!-- Use Angular's ngSubmit on the form -->
+    <form class="px-7 pt-4 pr-8 flex gap-4 w-full items-center" id="filterForm" (ngSubmit)="onSubmit()">
+      <div class="flex border border-gray-300 rounded-md shadow-sm">
+        <input type="text" name="fullName" placeholder="Search by Full name"
+               [(ngModel)]="fullName"
+               class="block w-1/2 rounded-l-md py-2 px-3 text-sm placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500"/>
+
+        <input type="text" name="searchEmail" placeholder="Search by e-mail"
+               [(ngModel)]="searchEmail"
+               class="block w-1/2 rounded-r-md py-2 px-3 text-sm placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500"/>
+      </div>
+      <div class="flex flex-col ml-auto">
+        <select name="role" id="role"
+                [(ngModel)]="role"
+                class="pr-6 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <option value="">All roles</option>
+          <option value="ROLE_ADMIN">Administrator</option>
+          <option value="ROLE_SECURITY_AGENT">Security Agent</option>
+        </select>
+      </div>
+
+      <button type="submit" class="px-2 hover:opacity-80">
+        <img src="/seach.png" alt="search" class="h-6 w-6">
+      </button>
+
+      <button type="button" class="px-2 hover:opacity-80" id="reset_button" (click)="onReset()">
+        <img src="/reset.png" alt="reset" class="h-6 w-6">
+      </button>
+    </form>
+  </section>
+
+    <div class=" px-7 py-8">
+    <table class="px-7 py-4 pt-5 w-full border-collapse border border-gray-200 shadow-sm rounded-lg overflow-hidden">
       <thead class="bg-[#2e2e48] text-white">
       <tr>
         <th class="p-4 text-left"></th>
@@ -25,7 +63,7 @@
         <td class="p-4">{{ user.lastName }}</td>
         <td class="p-4">{{ user.birthDate | date }}</td>
         <td class="p-4">
-          <span [ngSwitch]="user.roleName">
+          <span [ngSwitch]="user.role">
               <span *ngSwitchCase="'ROLE_SECURITY_AGENT'" class="bg-red-300 rounded px-2 py-1">
                 Security Agent
               </span>
@@ -53,6 +91,7 @@
       </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </div>
 
@@ -64,3 +103,9 @@
   (cancel)="closeDeleteModal()"
 >
 </app-delete-user-modal>
+
+<app-user-modal
+  [show]="showUserModal"
+  (close)="closeUserModal()"
+  (save)="handleSave($event)">
+</app-user-modal>

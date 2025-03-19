@@ -1,0 +1,27 @@
+<ng-content #searchUsers>
+  <form class="px-7 pt-4 pr-8 flex gap-4 w-full items-center" id="filterForm">
+    <div class="flex border border-gray-300 rounded-md shadow-sm">
+      <input type="text" name="nomComplet" placeholder="Search by Full name"
+             class="block w-1/2 rounded-l-md py-2 px-3 text-sm placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500"/>
+
+      <input type="text" name="searchEmail" placeholder="Search by e-mail"
+             class="block w-1/2 rounded-r-md py-2 px-3 text-sm placeholder-gray-400 focus:ring-indigo-500 focus:border-indigo-500"/>
+    </div>
+    <div class="flex flex-col ml-auto">
+      <select name="role" id="role"
+              class="pr-6 p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600">
+        <option value="" >Tous les roles</option>
+        <option>Administrator</option>
+        <option >Security Agent</option>
+      </select>
+    </div>
+
+    <button type="submit" class="px-2 hover:opacity-80">
+      <img src="/seach.png" alt="Rechercher" class="h-6 w-6">
+    </button>
+
+    <button type="button" class="px-2 hover:opacity-80" id="reset_button">
+      <img src="/reset.png" alt="reset" class="h-6 w-6">
+    </button>
+  </form>
+</ng-content>
