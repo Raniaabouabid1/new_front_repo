@@ -55,9 +55,10 @@
       <tbody>
       <tr *ngFor="let user of users" class="bg-gray-100 hover:bg-gray-200 transition-all">
         <td class="p-4 text-left">
-          <button class="hover:opacity-80 viewBtns" type="button">
-            <img src="/eye.png" alt="Voir" class="h-6 w-6" />
+          <button (click)="openViewModal(user)" class="hover:opacity-80 viewBtns" type="button">
+            <img src="/eye.png" alt="view" class="h-6 w-6" />
           </button>
+
         </td>
         <td class="p-4">{{ user.firstName }}</td>
         <td class="p-4">{{ user.lastName }}</td>
@@ -79,9 +80,10 @@
         <td class="p-4">{{ user.phoneNumber }}</td>
         <td class="p-4 flex items-center justify-center gap-3">
           <!-- Edit Button -->
-          <button class="hover:opacity-80 modBtns" type="button">
-            <img src="/edit.png" alt="Modifier" class="h-6 w-6" />
+          <button (click)="openEditModal(user)" class="hover:opacity-80 editBtns" type="button">
+            <img src="/edit.png" alt="Edit" class="h-6 w-6" />
           </button>
+
 
           <!-- Delete Button -->
           <button class="hover:opacity-80 deleteBtns" (click)="openDeleteModal(user)">
@@ -106,6 +108,8 @@
 
 <app-user-modal
   [show]="showUserModal"
+  [mode]="modalMode"
+  [user]="selectedUser"
   (close)="closeUserModal()"
   (save)="handleSave($event)">
 </app-user-modal>

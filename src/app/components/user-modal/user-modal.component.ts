@@ -1,6 +1,8 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import {NgIf} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import { IUser } from '../users/users.component.service';
+
 
 @Component({
   selector: 'app-user-modal',
@@ -13,6 +15,9 @@ import {FormsModule} from '@angular/forms';
 })
 export class UserModalComponent {
   @Input() show: boolean = false;
+  @Input() mode: 'add' | 'view' | 'edit' = 'add';
+  @Input() user: IUser | null = null;
+
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<any>();
 
@@ -21,7 +26,9 @@ export class UserModalComponent {
   }
 
   onSubmit(formData: any): void {
-    this.save.emit(formData);
-  }
+    if (this.mode !== 'view') {
+      this.save.emit(formData);
+    }
 
+  }
 }

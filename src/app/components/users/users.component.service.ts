@@ -45,6 +45,12 @@ export class UserService {
     });
   }
 
+  updateUser(user: IUser): Observable<IUser> {
+    return this.http.put<IUser>(`${this.apiUrl}/${user.id}`, user, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+
+  }
 
 }
 

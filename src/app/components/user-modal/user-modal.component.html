@@ -5,7 +5,9 @@
     <div class="relative bg-white rounded-lg shadow max-h-[90vh] overflow-hidden">
       <!-- Modal header -->
       <div class="flex p-4 border-b rounded-t border-gray-600">
-        <h3 id="modalTitle" class="text-3xl font-bold text-gray-900">Add a New User</h3>
+        <h3 id="modalTitle" class="text-3xl font-bold text-gray-900">
+          {{ mode === 'view' ? 'View User' : 'Add a New User' }}
+        </h3>
         <button type="button"
                 (click)="onClose()"
                 class="ml-auto bg-transparent hover:bg-[#B10C74] hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
@@ -19,18 +21,24 @@
       </div>
       <!-- Modal body with form -->
       <div class="p-4 overflow-y-auto" style="max-height: calc(90vh - 150px);">
+        <!-- When in view mode, we want to pre-populate the form using [ngModel] -->
         <form id="userModalForm" (ngSubmit)="onSubmit(userForm.value)" #userForm="ngForm">
+          <input type="hidden" name="id" [ngModel]="user?.id" />
           <!-- First Name and Last Name on the same line -->
           <div class="px-3 flex space-x-1">
             <div class="w-1/2">
               <label for="firstName" class="block mb-2 font-medium">First name</label>
               <input type="text" name="firstName" id="firstName" required placeholder="Enter first name"
-                     class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+                     class="w-full p-3 rounded border border-gray-500 text-gray-700"
+                     [ngModel]="user?.firstName" ngModel
+                     [disabled]="mode === 'view'" />
             </div>
             <div class="w-1/2">
               <label for="lastName" class="block mb-2 font-medium">Last name</label>
               <input type="text" name="lastName" id="lastName" required placeholder="Enter last name"
-                     class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+                     class="w-full p-3 rounded border border-gray-500 text-gray-700"
+                     [ngModel]="user?.lastName" ngModel
+                     [disabled]="mode === 'view'" />
             </div>
           </div>
 
@@ -38,20 +46,25 @@
           <div class="px-3 pb-3 mt-4">
             <label for="birthDate" class="block mb-2 font-medium">Birth day</label>
             <input type="date" name="birthDate" id="birthDate" required placeholder="Enter birth date"
-                   class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+                   class="w-full p-3 rounded border border-gray-500 text-gray-700"
+                   [ngModel]="user?.birthDate" ngModel
+                   [disabled]="mode === 'view'" />
           </div>
 
           <!-- Email -->
           <div class="px-3 pb-3">
             <label for="email" class="block mb-2 font-medium">E-mail</label>
             <input type="email" name="email" id="email" required placeholder="Enter e-mail"
-                   class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+                   class="w-full p-3 rounded border border-gray-500 text-gray-700"
+                   [ngModel]="user?.email" ngModel
+                   [disabled]="mode === 'view'" />
           </div>
 
           <!-- Role -->
           <div class="px-3 pb-3">
             <label for="role" class="block mb-2 font-medium">Select Role</label>
-            <select name="role" id="role" required class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel>
+            <select name="role" id="role" required class="w-full p-3 rounded border border-gray-500 text-gray-700"
+                    [ngModel]="user?.role " ngModel [disabled]="mode === 'view'">
               <option value="ROLE_SECURITY_AGENT">Security Agent</option>
               <option value="ROLE_ADMIN">Administrator</option>
             </select>
@@ -61,11 +74,13 @@
           <div class="px-3 pb-3">
             <label for="phoneNumber" class="block mb-2 font-medium">Phone number</label>
             <input type="text" name="phoneNumber" id="phoneNumber" required placeholder="Enter phone number"
-                   class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+                   class="w-full p-3 rounded border border-gray-500 text-gray-700"
+                   [ngModel]="user?.phoneNumber" ngModel
+                   [disabled]="mode === 'view'" />
           </div>
 
           <!-- Password and Confirm Password on the same line -->
-          <div class="px-3 flex space-x-4 mt-4">
+          <div class="px-3 flex space-x-4 mt-4" *ngIf="mode !== 'view'">
             <div class="w-1/2">
               <label for="password" class="block mb-2 font-medium">Password</label>
               <input type="password" name="password" id="password" required placeholder="Enter password"
@@ -81,13 +96,14 @@
       </div>
       <!-- Modal footer -->
       <div class="flex items-center justify-center p-4 border-t rounded-b">
-        <button type="submit" form="userModalForm" id="confirmBtn"
+        <!-- Only show confirm/save button if not in view mode -->
+        <button *ngIf="mode !== 'view'" type="submit" form="userModalForm" id="confirmBtn"
                 class="w-1/4 bg-[#313863] text-white font-bold py-3 px-6 m-2 rounded hover:bg-[#5663af]">
           Confirm
         </button>
         <button type="button" (click)="onClose()"
                 class="w-1/4 bg-red-600 hover:bg-red-800 text-white m-2 font-bold py-3 px-6 rounded">
-          Cancel
+          {{ mode === 'view' ? 'Close' : 'Cancel' }}
         </button>
       </div>
     </div>

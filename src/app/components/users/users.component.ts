@@ -29,33 +29,62 @@ export class UsersComponent implements OnInit {
   fullName: string = '';
   searchEmail: string = '';
   role: string = '';
+  showUserModal: boolean = false;
+  modalMode: 'add' | 'view' | 'edit' = 'add';
 
   constructor(private userService: UserService) {}
   ngOnInit(): void {
     this.loadUsers(); // load users initially without filters
   }
 
-  showUserModal: boolean = false;
 
   openUserModal(): void {
+    // When adding a user, set mode to 'add' and clear selectedUser.
+    this.modalMode = 'add';
+    this.selectedUser = null;
     this.showUserModal = true;
   }
+
+  openViewModal(user: IUser): void {
+    this.modalMode = 'view';
+    this.selectedUser = user;
+    this.showUserModal = true;
+  }
+  openEditModal(user: IUser): void {
+    this.modalMode = 'edit';
+    this.selectedUser = user;
+    this.showUserModal = true;
+  }
+
+
 
   closeUserModal(): void {
     this.showUserModal = false;
   }
 
   handleSave(formData: IUser): void {
-    console.log('Saving user with data:', formData);
-    this.userService.addUser(formData).subscribe(
-      (response: IUser) => {
-        // Optionally update your users list
-        this.users.push(response);
-        this.closeUserModal();
-      },
-      error => { console.error('Error adding user', error); }
-    );
-  }
+    if (this.modalMode === 'add') {
+      this.userService.addUser(formData).subscribe(
+        (response: IUser) => {
+          this.users.push(response);
+          this.closeUserModal();
+        },
+        error => { console.error('Error adding user', error); }
+      );
+    } else if (this.modalMode === 'edit') {
+      this.userService.updateUser(formData).subscribe(
+        (response: IUser) => {
+          const index = this.users.findIndex(u => u.id === response.id);
+          if (index > -1) {
+            this.users[index] = response;
+          }
+          this.closeUserModal();
+        },
+        error => { console.error('Error updating user', error); }
+      );
+    }
+
+}
 
   loadUsers(): void {
     const params = {
