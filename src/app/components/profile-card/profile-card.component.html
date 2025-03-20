@@ -8,17 +8,14 @@
           <div class="relative w-20 h-20">
             <img [src]="user.profileImage ? user.profileImage : '/avatar.svg'" alt="Profile Picture"
                  class="w-full h-full rounded-full border-2 border-blue-500" />
-
             <!-- File Upload Input (Hidden) -->
             <input type="file" #fileInput accept="image/*" (change)="uploadProfileImage($event)" hidden>
-
             <!-- Plus Icon (Click to trigger file selection) -->
             <button (click)="fileInput.click()"
                     class="absolute bottom-0 left-0 bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-md hover:bg-green-700">
               +
             </button>
           </div>
-
           <div>
             <h2 class="text-2xl font-semibold">
               {{ user.firstName }} {{ user.lastName }}
@@ -33,73 +30,88 @@
 
       <!-- User Information (Two-column Layout) -->
       <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
-        <!-- Left Column -->
+        <!-- Left Column: Stacked fields -->
         <div class="space-y-4">
-          <!-- Full Name -->
+          <!-- First Name -->
           <div>
-            <label class="block text-sm text-gray-600 py-3">Full Name</label>
-            <div class="flex gap-2">
-              <input type="text"
-                     [readonly]="!editMode"
-                     class="px-3 py-2 w-1/2 rounded border border-gray-300"
-                     [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}"
-                     [(ngModel)]="user.firstName">
-              <input type="text"
-                     [readonly]="!editMode"
-                     class="px-3 py-2 w-1/2 rounded border border-gray-300"
-                     [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}"
-                     [(ngModel)]="user.lastName"
-              >
+            <label class="block text-sm text-gray-600 py-3">First Name</label>
+            <input type="text" name="firstName" required
+                   pattern="^[a-zA-Z]+([ -][a-zA-Z]+)*$"
+                   [(ngModel)]="user.firstName" #firstName="ngModel"
+                   [readonly]="!editMode"
+                   class="px-3 py-2 w-full rounded border border-gray-300"
+                   [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}">
+            <div *ngIf="firstName.invalid && firstName.touched" class="text-red-500 text-xs mt-1">
+              <div *ngIf="firstName.errors?.['required']">First name is required.</div>
+              <div *ngIf="firstName.errors?.['pattern']">Invalid first name format.</div>
             </div>
           </div>
-
-          <!-- Email -->
+          <!-- Last Name -->
+          <div>
+            <label class="block text-sm text-gray-600 py-3">Last Name</label>
+            <input type="text" name="lastName" required
+                   pattern="^[a-zA-Z]+([ -][a-zA-Z]+)*$"
+                   [(ngModel)]="user.lastName" #lastName="ngModel"
+                   [readonly]="!editMode"
+                   class="px-3 py-2 w-full rounded border border-gray-300"
+                   [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}">
+            <div *ngIf="lastName.invalid && lastName.touched" class="text-red-500 text-xs mt-1">
+              <div *ngIf="lastName.errors?.['required']">Last name is required.</div>
+              <div *ngIf="lastName.errors?.['pattern']">Invalid last name format.</div>
+            </div>
+          </div>
+          <!-- Email Address -->
           <div>
             <label class="block text-sm text-gray-600 py-3">Email Address</label>
-            <div class="flex items-center rounded border border-gray-300">
-              <input type="email"
-                     [readonly]="!editMode"
-                     class="w-full ml-2 outline-none px-3 py-2 rounded"
-                     [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}"
-                     [(ngModel)]="user.email"
-              >
+            <input type="email" name="email" required
+                   [(ngModel)]="user.email" #email="ngModel"
+                   [readonly]="!editMode"
+                   class="w-full ml-2 px-3 py-2 rounded border border-gray-300"
+                   [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}">
+
+            <div *ngIf="emailError" class="text-red-500 text-xs mt-1">
+              {{ emailError }}
+            </div>
+          </div>
+          <div *ngIf="editMode">
+            <label class="block text-sm text-gray-600 py-3">Change Password</label>
+            <input type="password" name="password" required
+                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+                   [(ngModel)]="newPassword" #passwordField="ngModel"
+                   class="w-full px-3 py-2 rounded border border-gray-300"
+                   [ngClass]="{'bg-gray-50': editMode}">
+            <div *ngIf="passwordField.invalid && passwordField.touched" class="text-red-500 text-xs mt-1">
+              <div *ngIf="passwordField.errors?.['required']">Password is required.</div>
+              <div *ngIf="passwordField.errors?.['pattern']">
+                Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.
+              </div>
             </div>
           </div>
 
-          <!-- Phone Number -->
-          <div>
-            <label class="block text-sm text-gray-600 py-3">Phone Number</label>
-            <input type="text"
-                   [readonly]="!editMode"
-                   class="px-3 py-2 w-full rounded border border-gray-300"
-                   [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}"
-                   [(ngModel)]="user.telephone">
-          </div>
-
-          <!-- Change Password -->
-          <div>
-            <label [ngClass]="{'': editMode, 'hidden': !editMode}" class="block text-sm text-gray-600 py-3">Change Password</label>
-            <input type="password" placeholder="Enter your new password"
-                   [ngClass]="{'bg-gray-50': editMode, 'hidden': !editMode}"
-                   class="px-3 py-2 w-full rounded border border-gray-300"
-                   [(ngModel)]="newPassword">
-          </div>
         </div>
 
-        <!-- Right Column -->
+
+        <!-- Right Column: Edit-only fields and read-only info -->
         <div class="space-y-4">
-          <!-- Birth Date -->
           <div>
-            <label class="block text-sm text-gray-600 py-3">Birth Date</label>
-            <input type="date"
+            <label class="block text-sm text-gray-600 py-3">Phone Number</label>
+            <input type="text" name="phoneNumber" required
+                   pattern="^(?:\+212|0)[5-7]\d{8}$"
+                   [(ngModel)]="user.phoneNumber" #phoneNumber="ngModel"
                    [readonly]="!editMode"
                    class="px-3 py-2 w-full rounded border border-gray-300"
-                   [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}"
-                   [(ngModel)]="user.birthDate"
-            >
+                   [ngClass]="{'bg-gray-50': editMode, 'bg-gray-200': !editMode}">
+            <!-- Built-in validation errors -->
+            <div *ngIf="phoneNumber.invalid && phoneNumber.touched" class="text-red-500 text-xs mt-1">
+              <div *ngIf="phoneNumber.errors?.['required']">Phone number is required.</div>
+              <div *ngIf="phoneNumber.errors?.['pattern']">Invalid Moroccan phone number format.</div>
+            </div>
+            <!-- Backend uniqueness error for phone -->
+            <div *ngIf="phoneError" class="text-red-500 text-xs mt-1">
+              {{ phoneError }}
+            </div>
           </div>
 
-          <!-- Role (Always Read-Only) -->
           <div>
             <label class="block text-sm text-gray-600 py-3">Role</label>
             <div [ngSwitch]="user.roleName">
@@ -111,26 +123,28 @@
             </div>
           </div>
 
-          <!-- Assigned Section (Always Read-Only) -->
           <div>
             <label class="block text-sm text-gray-600 py-3">Assigned Section</label>
             <input type="text" readonly
                    class="bg-gray-200 px-3 py-2 w-full rounded border border-gray-300"
                    [value]="user.assignedSection ? user.assignedSection : 'No assigned section'">
           </div>
+          <div *ngIf="editMode">
 
-          <!-- Confirm Password -->
-          <div>
-            <label [ngClass]="{'': editMode, 'hidden': !editMode}" class="block text-sm text-gray-600 py-3">Confirm Password</label>
-            <input type="password" placeholder="Confirm your new password"
-                   [ngClass]="{'bg-gray-50': editMode, 'hidden': !editMode}"
-                   class="px-3 py-2 w-full rounded border border-gray-300"
-                   [(ngModel)]="confirmPassword"
+            <label class="block text-sm text-gray-600 py-3">Confirm Password</label>
+            <input type="password" name="confirmPsw" required
+                   [(ngModel)]="confirmPassword" #confirmField="ngModel"
+                   class="w-full px-3 py-2 rounded border border-gray-300"
+                   [ngClass]="{'bg-gray-50': editMode}"
                    (input)="validatePasswords()">
-            <p class="text-red-500 text-sm mt-1" *ngIf="passwordMismatch">
-              Passwords do not match!
-            </p>
+            <div *ngIf="(confirmField.invalid || passwordMismatch) && confirmField.touched" class="text-red-500 text-xs mt-1">
+              <div *ngIf="confirmField.errors?.['required']">Please confirm your password.</div>
+              <div *ngIf="passwordMismatch">Passwords do not match!</div>
+            </div>
+          </div>
         </div>
+
+
       </div>
 
       <!-- Actions (Button inside the card) -->
@@ -142,5 +156,4 @@
       </div>
     </div>
   </div>
-</div>
 </div>

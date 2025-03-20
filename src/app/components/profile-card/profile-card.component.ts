@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {jwtDecode} from 'jwt-decode'; // Correct default import
-import {NgClass, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
+import {JsonPipe, NgClass, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 interface JwtPayload {
@@ -20,8 +20,7 @@ interface JwtPayload {
     NgSwitchDefault,
     NgClass,
     FormsModule,
-    NgIf,
-    // Import FormsModule for ngModel
+    NgIf
   ],
   standalone: true
 })
@@ -32,6 +31,9 @@ export class ProfileCardComponent implements OnInit {
   newPassword: string = '';
   confirmPassword: string = '';
   passwordMismatch: boolean = false;
+  emailError : String = '';
+  phoneError: string = '';
+
 
   constructor(private http: HttpClient) {
   }
@@ -43,6 +45,7 @@ export class ProfileCardComponent implements OnInit {
         const decoded = jwtDecode<JwtPayload>(token);
         this.userId = decoded.sub;
         console.log('Extracted user ID from token:', this.userId);
+
         this.http.get(`http://localhost:8080/api/users/${this.userId}`)
           .subscribe({
             next: data => {
@@ -84,8 +87,7 @@ export class ProfileCardComponent implements OnInit {
       if (this.newPassword !== this.confirmPassword) {
         this.passwordMismatch = true;
         return;
-      }
-      this.passwordMismatch = false;
+      }      this.passwordMismatch = false;
     }
 
     const payload: any = {
@@ -110,9 +112,33 @@ export class ProfileCardComponent implements OnInit {
           this.editMode = false;
           this.newPassword = '';
           this.confirmPassword = '';
+          // Clear error messages on success
+          this.emailError = '';
+          this.phoneError = '';
         },
         error: (error) => {
           console.error('Failed to update user:', error);
+          // Check if it's a 409 conflict and inspect the error message
+          if (error.status === 409 && error.error) {
+            // Assuming the backend sends a message like "email already exists" or "phone number already exists"
+            const errorMessage: string = error.error;
+            // Simple logic: if message contains "email", set emailError; if "phone", set phoneError.
+            if (errorMessage.toLowerCase().includes('email')) {
+              this.emailError = errorMessage;
+              this.phoneError = '';
+            } else if (errorMessage.toLowerCase().includes('phone')) {
+              this.phoneError = errorMessage;
+              this.emailError = '';
+            } else {
+              // Otherwise, you can set a general error message.
+              this.emailError = errorMessage;
+              this.phoneError = '';
+            }
+          } else {
+            // General error message
+            this.emailError = 'Email format is invalid.';
+            this.phoneError = '';
+          }
         }
       });
   }
