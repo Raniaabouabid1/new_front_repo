@@ -6,11 +6,11 @@
       <!-- Modal header -->
       <div class="flex p-4 border-b rounded-t border-gray-600">
         <h3 id="modalTitle" class="text-3xl font-bold text-gray-900">
-          {{ mode === 'view' ? 'View User' : 'Add a New User' }}
+          {{ mode === 'view' ? 'View User' : (mode === 'edit' ? 'Edit User' : 'Add a New User') }}
         </h3>
         <button type="button"
                 (click)="onClose()"
-                class="ml-auto bg-transparent hover:bg-[#B10C74] hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
+                class="ml-auto bg-transparent hover:bg-red-500 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
           <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                viewBox="0 0 14 14">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -30,15 +30,29 @@
               <label for="firstName" class="block mb-2 font-medium">First name</label>
               <input type="text" name="firstName" id="firstName" required placeholder="Enter first name"
                      class="w-full p-3 rounded border border-gray-500 text-gray-700"
-                     [ngModel]="user?.firstName" ngModel
+                     pattern="^[a-zA-Z]+([ -][a-zA-Z]+)*$"
+                     [ngModel]="user?.firstName" ngModel #firstName="ngModel"
                      [disabled]="mode === 'view'" />
+
+              <div *ngIf="firstName.invalid && firstName.touched" class="text-red-500 text-xs mt-1">
+                <div *ngIf="firstName.errors?.['required']">First name is required.</div>
+                <div *ngIf="firstName.errors?.['pattern']">Only letters and spaces/hyphens are allowed.</div>
+              </div>
+
             </div>
             <div class="w-1/2">
               <label for="lastName" class="block mb-2 font-medium">Last name</label>
-              <input type="text" name="lastName" id="lastName" required placeholder="Enter last name"
+              <input type="text" name="lastName" id="lastName" required
+                     pattern="^[a-zA-Z]+([ -][a-zA-Z]+)*$"
                      class="w-full p-3 rounded border border-gray-500 text-gray-700"
-                     [ngModel]="user?.lastName" ngModel
+                     [ngModel]="user?.lastName" ngModel #lastName="ngModel"
                      [disabled]="mode === 'view'" />
+
+              <div *ngIf="lastName.invalid && lastName.touched" class="text-red-500 text-xs mt-1">
+                <div *ngIf="lastName.errors?.['required']">Last name is required.</div>
+                <div *ngIf="lastName.errors?.['pattern']">Only letters and spaces/hyphens are allowed.</div>
+              </div>
+
             </div>
           </div>
 
@@ -54,10 +68,16 @@
           <!-- Email -->
           <div class="px-3 pb-3">
             <label for="email" class="block mb-2 font-medium">E-mail</label>
-            <input type="email" name="email" id="email" required placeholder="Enter e-mail"
+            <input type="email" name="email" id="email" required
                    class="w-full p-3 rounded border border-gray-500 text-gray-700"
-                   [ngModel]="user?.email" ngModel
+                   [ngModel]="user?.email" ngModel #email="ngModel"
                    [disabled]="mode === 'view'" />
+
+            <div *ngIf="email.invalid && email.touched" class="text-red-500 text-xs mt-1">
+              <div *ngIf="email.errors?.['required']">Email is required.</div>
+              <div *ngIf="email.errors?.['email']">Invalid email format.</div>
+            </div>
+
           </div>
 
           <!-- Role -->
@@ -73,25 +93,51 @@
           <!-- Phone Number -->
           <div class="px-3 pb-3">
             <label for="phoneNumber" class="block mb-2 font-medium">Phone number</label>
-            <input type="text" name="phoneNumber" id="phoneNumber" required placeholder="Enter phone number"
+            <input type="text" name="phoneNumber" id="phoneNumber" required
+                   pattern="^(?:\+212|0)[5-7]\d{8}$"
                    class="w-full p-3 rounded border border-gray-500 text-gray-700"
-                   [ngModel]="user?.phoneNumber" ngModel
+                   [ngModel]="user?.phoneNumber" ngModel #phoneNumber="ngModel"
                    [disabled]="mode === 'view'" />
+
+            <div *ngIf="phoneNumber.invalid && phoneNumber.touched" class="text-red-500 text-xs mt-1">
+              <div *ngIf="phoneNumber.errors?.['required']">Phone number is required.</div>
+              <div *ngIf="phoneNumber.errors?.['pattern']">Invalid Moroccan phone number.</div>
+            </div>
+
           </div>
 
           <!-- Password and Confirm Password on the same line -->
           <div class="px-3 flex space-x-4 mt-4" *ngIf="mode !== 'view'">
+            <!-- Password -->
             <div class="w-1/2">
               <label for="password" class="block mb-2 font-medium">Password</label>
-              <input type="password" name="password" id="password" required placeholder="Enter password"
-                     class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+              <input type="password" name="password" id="password" required
+                     pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$"
+                     class="w-full p-3 rounded border border-gray-500 text-gray-700"
+                     [(ngModel)]="newPassword" #passwordField="ngModel" (input)="validatePasswords()"/>
+
+              <div *ngIf="passwordField.invalid && passwordField.touched" class="text-red-500 text-xs mt-1">
+                <div *ngIf="passwordField.errors?.['required']">Password is required.</div>
+                <div *ngIf="passwordField.errors?.['pattern']">
+                  Password must be at least 8 characters long, contain an uppercase letter, a lowercase letter, a number, and a special character.
+                </div>
+              </div>
             </div>
+
+            <!-- Confirm Password -->
             <div class="w-1/2">
               <label for="confirmPsw" class="block mb-2 font-medium">Confirm password</label>
-              <input type="password" name="confirmPsw" id="confirmPsw" required placeholder="Confirm password"
-                     class="w-full p-3 rounded border border-gray-500 text-gray-700" ngModel/>
+              <input type="password" name="confirmPsw" id="confirmPsw" required
+                     class="w-full p-3 rounded border border-gray-500 text-gray-700"
+                     [(ngModel)]="confirmPassword" #confirmField="ngModel" (input)="validatePasswords()"/>
+
+              <div *ngIf="(confirmField.invalid || passwordMismatch) && confirmField.touched" class="text-red-500 text-xs mt-1">
+                <div *ngIf="confirmField.errors?.['required']">Please confirm your password.</div>
+                <div *ngIf="passwordMismatch">Passwords do not match!</div>
+              </div>
             </div>
           </div>
+
         </form>
       </div>
       <!-- Modal footer -->

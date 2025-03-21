@@ -5,6 +5,7 @@ import {DatePipe, NgForOf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgTemplateOu
 import {DeleteUserModalComponent} from '../delete-user-modal/delete-user-modal.component';
 import {FormsModule} from '@angular/forms';
 import {UserModalComponent} from '../user-modal/user-modal.component';
+import {UsersPaginationComponent} from '../users-pagination/users-pagination.component';
 
 @Component({
   selector: 'app-users',
@@ -19,6 +20,7 @@ import {UserModalComponent} from '../user-modal/user-modal.component';
     FormsModule,
     UserModalComponent,
     DeleteUserModalComponent,
+    UsersPaginationComponent,
   ],
   styleUrls: ['./users.component.css']
 })
@@ -31,10 +33,19 @@ export class UsersComponent implements OnInit {
   role: string = '';
   showUserModal: boolean = false;
   modalMode: 'add' | 'view' | 'edit' = 'add';
+  currentPage = 0;
+  pageSize = 5;
+  totalPages = 0;
+
+
 
   constructor(private userService: UserService) {}
   ngOnInit(): void {
     this.loadUsers(); // load users initially without filters
+  }
+  goToPage(page: number): void {
+    this.currentPage = page;
+    this.loadUsers();
   }
 
 
@@ -87,16 +98,13 @@ export class UsersComponent implements OnInit {
 }
 
   loadUsers(): void {
-    const params = {
-      fullName: this.fullName,
-      searchEmail: this.searchEmail,
-      role: this.role
-    };
-
-    this.userService.getUsers(params).subscribe((data: IUser[]) => {
-      this.users = data;
-    });
+    this.userService.getUsers(this.currentPage, this.pageSize, this.fullName, this.role, this.searchEmail)
+      .subscribe((data: any) => {
+        this.users = data.content;
+        this.totalPages = data.totalPages;
+      });
   }
+
 
   // Called on form submission
   onSubmit(): void {

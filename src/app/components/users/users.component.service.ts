@@ -21,7 +21,19 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  // Accept optional query params
+  getUsers(page: number, size: number, fullName?: string, role?: string, searchEmail?: string): Observable<any> {
+    const params = new HttpParams()
+      .set('page', page)
+      .set('size', size)
+      .set('fullName', fullName || '')
+      .set('searchEmail', searchEmail || '')
+      .set('role', role || '');
+
+    return this.http.get<any>(this.apiUrl, { params });
+  }
+
+
+  /*// Accept optional query params
   getUsers(paramsObj?: any): Observable<IUser[]> {
     let params = new HttpParams();
     if (paramsObj) {
@@ -32,7 +44,7 @@ export class UserService {
       });
     }
     return this.http.get<IUser[]>(this.apiUrl, { params });
-  }
+  }*/
 
   deleteUser(userId: number | undefined): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${userId}`); // Delete user by ID

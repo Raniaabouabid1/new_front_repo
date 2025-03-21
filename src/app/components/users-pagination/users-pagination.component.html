@@ -1,0 +1,16 @@
+<div class="py-6 pagination-container">
+  <ul *ngIf="totalPages > 1" class="pagination flex justify-center gap-4">
+    <li *ngIf="currentPage > 0">
+      <button (click)="goToPage(currentPage - 1)" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Previous</button>
+    </li>
+
+    <li *ngFor="let page of [].constructor(totalPages); let i = index"
+        [ngClass]="{'font-bold text-blue-600': i === currentPage}">
+      <button (click)="goToPage(i)" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">{{ i + 1 }}</button>
+    </li>
+
+    <li *ngIf="currentPage < totalPages - 1">
+      <button (click)="goToPage(currentPage + 1)" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Next</button>
+    </li>
+  </ul>
+</div>

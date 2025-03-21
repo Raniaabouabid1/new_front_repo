@@ -93,6 +93,12 @@
       </tr>
       </tbody>
     </table>
+      <app-users-pagination
+        [currentPage]="currentPage"
+        [totalPages]="totalPages"
+        (pageChange)="goToPage($event)">
+      </app-users-pagination>
+
     </div>
   </div>
 </div>
