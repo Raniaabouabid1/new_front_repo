@@ -33,6 +33,9 @@ export class ProfileCardComponent implements OnInit {
   passwordMismatch: boolean = false;
   emailError : String = '';
   phoneError: string = '';
+  showSuccessAlert: boolean = false;
+  showErrorAlert: boolean = false;
+
 
 
   constructor(private http: HttpClient) {
@@ -82,12 +85,15 @@ export class ProfileCardComponent implements OnInit {
   validatePasswords() {
     this.passwordMismatch = this.newPassword !== this.confirmPassword;
   }
+
+
   saveChanges(): void {
     if (this.newPassword && this.confirmPassword) {
       if (this.newPassword !== this.confirmPassword) {
         this.passwordMismatch = true;
         return;
-      }      this.passwordMismatch = false;
+      }
+      this.passwordMismatch = false;
     }
 
     const payload: any = {
@@ -103,7 +109,7 @@ export class ProfileCardComponent implements OnInit {
       payload.password = this.newPassword;
     }
 
-    console.log("Sending update request:", payload); // ✅ Debugging line
+    console.log("Sending update request:", payload);
 
     this.http.patch(`http://localhost:8080/api/users/${this.userId}`, payload)
       .subscribe({
@@ -112,17 +118,27 @@ export class ProfileCardComponent implements OnInit {
           this.editMode = false;
           this.newPassword = '';
           this.confirmPassword = '';
-          // Clear error messages on success
           this.emailError = '';
           this.phoneError = '';
+
+          // ✅ Show success alert
+          this.showSuccessAlert = true;
+
+          // ✅ Auto-hide the alert after 3 seconds
+          setTimeout(() => {
+            this.showSuccessAlert = false;
+          }, 30000);
         },
         error: (error) => {
           console.error('Failed to update user:', error);
-          // Check if it's a 409 conflict and inspect the error message
+          this.showErrorAlert = true;
+
+          // ✅ Auto-hide the alert after 3 seconds
+          setTimeout(() => {
+            this.showSuccessAlert = false;
+          }, 30);
           if (error.status === 409 && error.error) {
-            // Assuming the backend sends a message like "email already exists" or "phone number already exists"
             const errorMessage: string = error.error;
-            // Simple logic: if message contains "email", set emailError; if "phone", set phoneError.
             if (errorMessage.toLowerCase().includes('email')) {
               this.emailError = errorMessage;
               this.phoneError = '';
@@ -130,18 +146,20 @@ export class ProfileCardComponent implements OnInit {
               this.phoneError = errorMessage;
               this.emailError = '';
             } else {
-              // Otherwise, you can set a general error message.
               this.emailError = errorMessage;
               this.phoneError = '';
             }
           } else {
-            // General error message
             this.emailError = 'Email format is invalid.';
             this.phoneError = '';
           }
+
+          // ✅ Hide success alert on failure (just to be safe)
+          this.showSuccessAlert = false;
         }
       });
-  }
+
+}
 
   uploadProfileImage(event: any): void {
     const file = event.target.files[0];

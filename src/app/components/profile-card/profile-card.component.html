@@ -27,9 +27,32 @@
           </div>
         </div>
       </div>
+      <!-- ✅ Success Alert -->
+      <div *ngIf="showSuccessAlert"
+           class="relative p-4 mb-4 text-sm text-green-900 rounded-lg bg-green-50 dark:bg-green-100 dark:text-green-700"
+           role="alert">
+        <span class="font-medium">Success!</span> Your personal information has been successfully updated!
+        <button (click)="showSuccessAlert = false"
+                class="absolute top-2 right-2 text-green-900 hover:text-green-600 focus:outline-none text-lg">
+          &times;
+        </button>
+      </div>
+
+      <div *ngIf="showErrorAlert"
+           class="relative p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-red-100 dark:text-red-800"
+           role="alert">
+        <span class="font-medium">Error!</span> An error happened while updating your information!
+        <button (click)="showErrorAlert = false"
+                class="absolute top-2 right-2 text-red-800 hover:text-red-600 focus:outline-none text-lg">
+          &times;
+        </button>
+      </div>
+
 
       <!-- User Information (Two-column Layout) -->
       <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+
+
         <!-- Left Column: Stacked fields -->
         <div class="space-y-4">
           <!-- First Name -->
