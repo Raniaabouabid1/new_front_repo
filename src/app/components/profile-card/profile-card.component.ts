@@ -53,6 +53,7 @@ export class ProfileCardComponent implements OnInit {
           .subscribe({
             next: data => {
               this.user = data;
+              console.log( "profile data"+data.toString());
               this.loadProfileImage(); // Load profile image after user data
             },
             error: err => {

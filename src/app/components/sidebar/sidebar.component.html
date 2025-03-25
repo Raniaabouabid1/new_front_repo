@@ -35,6 +35,10 @@
       <span class="material-icons text-xl transition-all duration-300 group-hover:translate-x-1">groups</span>
       <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Users</span>
     </a>
+    <a *ngIf="user.roleName== 'ROLE_ADMIN'" routerLink="/sections" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
+<img src="/section.png" class=" w-5 h-5 transition-all duration-300 group-hover:translate-x-1">
+      <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Sections</span>
+    </a>
 
     <a routerLink="/footages" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
       <span class="material-icons text-xl transition-all duration-300 group-hover:translate-x-1">camera</span>
@@ -53,7 +57,7 @@
   </nav>
 
     <!-- Logout Button -->
-    <div class="w-full flex justify-center pb-4 py-20">
+    <div class="w-full flex justify-center pb-4 py-10">
       <button (click)="logout()" class="flex items-center justify-center bg-[#FFFFFF] text-[#F31018] w-10 h-10 rounded-xl shadow-md transition-all duration-300 overflow-hidden group-hover:w-32 px-4">
         <span class="material-icons text-lg flex-shrink-0">logout</span>
         <span class="ml-2 text-sm opacity-0 group-hover:opacity-100 group-hover:w-auto w-0 transition-all duration-300 whitespace-nowrap">Logout</span>

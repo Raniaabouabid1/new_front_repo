@@ -1,0 +1,146 @@
+<div *ngIf="show" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-3xl">
+    <!-- Header -->
+    <div class="flex items-center justify-between p-4 border-b">
+      <h3 class="text-2xl font-semibold">
+        {{ mode === 'edit' ? 'Edit Section' : mode === 'view' ? 'View Section Infos' : 'Add a New Section' }}
+      </h3>
+      <button (click)="onClose()" class="text-gray-500 hover:text-red-600">
+        ✕
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6 max-h-[75vh] overflow-y-auto">
+      <form #sectionForm="ngForm" (ngSubmit)="onSubmit()">
+        <!-- Section Name -->
+        <div class="mb-4">
+          <label class="block font-medium mb-1">Section Name</label>
+          <input type="text" name="name" required [(ngModel)]="section.name" [readonly]="mode === 'view'"  class="w-full border p-2 rounded" />
+        </div>
+
+        <!-- Coordinates -->
+        <div class="mb-4">
+          <label class="block font-medium mb-1">Coordinates</label>
+          <input type="text" name="coordinates" required [(ngModel)]="section.coordinates"  [readonly]="mode === 'view'"  class="w-full border p-2 rounded" />
+        </div>
+
+        <!-- Users Multi-Select -->
+        <div class="mb-4">
+          <label class="block font-medium mb-1">Assign Users</label>
+
+          <!-- View Mode: Custom styled div list -->
+          <div *ngIf="mode === 'view'" class="space-y-1 border p-2 rounded h-32 overflow-y-auto bg-gray-50">
+            <div
+              *ngFor="let user of allUsers"
+              class="px-3 py-1 rounded bg-green-100 text-green-800 font-medium"
+            >
+              👤 {{ user.firstName }} {{ user.lastName }} - {{ user.email }}
+            </div>
+          </div>
+
+          <!-- Edit/Add Mode: Multi-select -->
+          <select
+            *ngIf="mode !== 'view'"
+            multiple
+            [(ngModel)]="section.userIds"
+            name="userIds"
+            class="w-full border p-2 rounded h-32"
+          >
+            <option
+              *ngFor="let user of allUsers"
+              [value]="user.id"
+              [selected]="section?.userIds?.includes(user.id)"
+              [ngClass]="{
+        'bg-green-100 text-green-800 font-semibold': mode === 'edit' && section?.userIds?.includes(user.id)
+      }"
+            >
+              {{ user.firstName }} {{ user.lastName }} - {{ user.email }}
+              <span *ngIf="mode === 'edit' && section?.userIds?.includes(user.id)">
+        (Assigned to this section)
+      </span>
+            </option>
+          </select>
+
+          <small *ngIf="mode === 'edit' || mode === 'view'" class="text-green-700 mt-1 block">
+            Green = assigned to this section
+          </small>
+        </div>
+
+        <!-- Cameras Dropdown -->
+        <div class="mb-4">
+          <label class="block font-medium mb-1">Assign Cameras</label>
+
+          <!-- View Mode -->
+          <div *ngIf="mode === 'view'" class="space-y-1 border p-2 rounded h-32 overflow-y-auto bg-gray-50">
+            <div
+              *ngFor="let cam of allCameras"
+              class="px-3 py-1 rounded bg-green-100 text-green-800 font-medium"
+            >
+              📷 {{ cam.name || ('Camera #' + cam.id) }}
+            </div>
+          </div>
+
+          <!-- Edit Mode -->
+          <!-- Edit Mode -->
+          <div *ngIf="mode === 'edit'" class="space-y-1 border p-2 rounded h-32 overflow-y-auto bg-white">
+            <label
+              *ngFor="let cam of allCameras"
+              class="flex items-center gap-2 px-3 py-1 rounded cursor-pointer"
+              [ngClass]="{
+      'bg-green-100 text-green-800 font-semibold': section.cameraIds?.includes(cam.id)
+    }"
+            >
+              <input
+                type="checkbox"
+                [value]="cam.id"
+                [checked]="section.cameraIds?.includes(cam.id)"
+                (change)="toggleCamera(cam.id, $event)"
+              />
+              {{ cam.name || ('Camera #' + cam.id) }}
+              <span *ngIf="section.cameraIds?.includes(cam.id)">
+      (Assigned to this section)
+    </span>
+            </label>
+          </div>
+
+
+          <!-- Add Mode -->
+          <select
+            *ngIf="mode === 'add'"
+            multiple
+            [(ngModel)]="section.cameraIds"
+            name="cameraIds"
+            class="w-full border p-2 rounded h-32"
+          >
+            <option
+              *ngFor="let cam of allCameras"
+              [value]="cam.id"
+            >
+              {{ cam.name || ('Camera #' + cam.id) }}
+            </option>
+          </select>
+
+          <small *ngIf="mode === 'edit' || mode === 'view'" class="text-green-700 mt-1 block">
+            Green = assigned to this section
+          </small>
+        </div>
+
+
+
+        <!-- Submit Button -->
+          <div class="flex justify-end space-x-4 mt-6">
+            <button *ngIf="mode !== 'view'" type="submit"
+                    class="bg-[#313863] text-white px-6 py-2 rounded hover:bg-[#4b5499]">
+              {{ mode === 'edit' ? 'Save Changes' : 'Add Section' }}
+            </button>
+
+            <button type="button" (click)="onClose()"
+                    class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-700">
+              {{ mode === 'view' ? 'Close' : 'Cancel' }}
+            </button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>

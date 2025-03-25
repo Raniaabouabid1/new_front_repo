@@ -1,0 +1,120 @@
+<div class="flex h-screen" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+
+  <div class="w-full max-w-7xl px-7 pt-5 overflow-auto">
+    <section class="px-7 py-4 pr-8  flex justify-between items-center">
+      <h2 class="text-3xl font-medium text-gray-800">List of Sections</h2>
+      <button  class="py-2 px-3 bg-[#313863] text-white rounded-lg" (click)="openAddModal()">
+        + Add a new Section
+      </button>
+    </section><section>
+    <form (ngSubmit)="onSearchSubmit()" class=" py-3  px-6 flex gap-4 items-center">
+      <div class="flex border border-gray-300 rounded-md shadow-sm">
+        <input type="text" name="name" [(ngModel)]="name" placeholder="Search by name"
+               class="block w-1/2 rounded-l-md py-2 px-3 text-sm" />
+        <input type="text" name="coordinates" [(ngModel)]="coordinates" placeholder="Search by coordinates"
+               class="block w-1/2 rounded-r-md py-2 px-3 text-sm" />
+      </div>
+      <button type="submit" class="px-2 hover:opacity-80">
+        <img src="/seach.png" alt="search" class="h-6 w-6">
+      </button>
+      <button type="button" (click)="resetFilters()" class="px-2 hover:opacity-80">
+        <img src="/reset.png" alt="reset" class="h-6 w-6">
+      </button>
+    </form>
+
+  </section>
+
+    <div class="py-3  px-6">
+    <div *ngIf="showSuccessAlert"   class=" px-7 relative p-5 mb-4 text-sm text-green-900 rounded-lg bg-green-50 dark:bg-green-100 dark:text-green-700" role="alert">
+      <span class="font-medium">Success!</span>
+      Section <strong>{{ sectionToDelete?.name }}</strong> was deleted successfully!
+      <button (click)="showSuccessAlert = false; sectionToDelete = null"   class="absolute top-2 right-2 text-green-900 hover:text-green-600 focus:outline-none text-lg">&times;</button>
+    </div>
+    <div *ngIf="showErrorAlert"  class="relative p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-red-100 dark:text-red-800" role="alert">
+      <span class="font-medium">Error!</span> An error happened while deleting the section : {{ sectionToDelete?.name }}!
+      <button (click)="showErrorAlert = false; sectionToDelete = null"  class="absolute top-2 right-2 text-red-800 hover:text-red-600 focus:outline-none text-lg"></button>
+    </div>
+    </div>
+    <div class="px-6">
+    <div *ngIf="showSuccessAddAlert"   class=" px-7 relative p-5 mb-4 text-sm text-green-900 rounded-lg bg-green-50 dark:bg-green-100 dark:text-green-700" role="alert">
+      <span class="font-medium">Success!</span>
+      Section <strong></strong> was Added successfully!
+      <button (click)="showSuccessAddAlert = false"   class="absolute top-2 right-2 text-green-900 hover:text-green-600 focus:outline-none text-lg">&times;</button>
+    </div>
+    <div *ngIf="showErrorAddAlert"  class="relative p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-red-100 dark:text-red-800" role="alert">
+      <span class="font-medium">Error!</span> An error happened while Adding the section!
+      <button (click)="showErrorAddAlert = false"  class="absolute top-2 right-2 text-red-800 hover:text-red-600 focus:outline-none text-lg"></button>
+    </div>
+    </div>
+
+
+    <div class=" px-7 ">
+      <table class="px-7 py-4 pt-5 w-full border-collapse border border-gray-200 shadow-sm rounded-lg overflow-hidden">
+        <thead class="bg-[#2e2e48] text-white">
+        <tr>
+          <th class="p-4 text-left"></th>
+          <th class="p-4 text-left">Section name</th>
+          <th class="p-4 text-left">Coordinates</th>
+          <th class="p-4 text-left">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let section of sections" class="bg-gray-100 hover:bg-gray-200 transition-all">
+          <td class="p-4 text-left">
+            <button  class="hover:opacity-80 viewBtns" type="button" (click)="openViewModal(section)">
+              <img src="/eye.png" alt="view" class="h-6 w-6" />
+            </button>
+          </td>
+          <td class="p-4">{{section.name}}</td>
+          <td class="p-4">{{section.coordinates}}</td>
+          <td>
+            <button  class="hover:opacity-80 editBtns" type="button" (click)="openEditModal(section)">
+              <img src="/edit.png" alt="Edit" class="h-6 w-6" />
+            </button>
+
+
+            <!-- Delete Button -->
+            <button class="hover:opacity-80 deleteBtns" (click)="openDeleteModal(section)">
+              <img src="/trash.png" alt="Supprimer" class="h-6 w-6" />
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <div class="mt-6 flex justify-center gap-2" *ngIf="totalPages > 1">
+      <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0"
+              class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Prev</button>
+      <button *ngFor="let page of [].constructor(totalPages); let i = index"
+              (click)="goToPage(i)"
+              [class.bg-blue-600]="i === currentPage"
+              class="px-3 py-1 rounded"
+              [class.text-white]="i === currentPage">
+        {{ i + 1 }}
+      </button>
+      <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage >= totalPages - 1"
+              class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300">Next</button>
+    </div>
+
+  </div>
+</div>
+<app-section-modal
+  [show]="isModalOpen"
+  [mode]="modalMode"
+  [section]="selectedSection"
+  [allUsers]="allUsers"
+  [allCameras]="allCameras"
+  (close)="closeModal()"
+  (submitSection)="saveSection($event)"
+ >
+</app-section-modal>
+<app-section-delete-modal
+  [show]="showDeleteModal"
+  [section]="sectionToDelete"
+  (cancel)="closeDeleteModal()"
+  (confirmDelete)="confirmDeleteSection()"
+></app-section-delete-modal>
+
+
+

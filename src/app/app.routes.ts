@@ -6,6 +6,7 @@ import { LogintestComponent } from './components/logintest/logintest.component';
 import { ProfileCardComponent } from './components/profile-card/profile-card.component';
 import { SurveillanceFootageComponent } from './components/surveillance-footage/surveillance-footage.component';
 import { UsersComponent } from './components/users/users.component';
+import { SectionsComponent} from './components/sections/sections.component';
 import { AuthGuard } from './auth/auth.guard';
 import {LogoutComponent} from './components/lougout/logout.component';
 
@@ -34,9 +35,9 @@ export const routes: Routes = [
     children: [
       // Guard the profile route; update parameter syntax if needed.
       { path: 'profile', component: ProfileCardComponent, canActivate: [AuthGuard] },
-      // Alternatively, if the profile doesn't require a parameter:
       { path: 'footages', component: SurveillanceFootageComponent, canActivate: [AuthGuard] },
       { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
+      { path: 'sections', component: SectionsComponent, canActivate: [AuthGuard] },
       { path: '', redirectTo: '/login', pathMatch: 'full' }
       // Other protected routes can be added here.
     ]
