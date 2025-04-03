@@ -23,7 +23,6 @@
     </div>
   </div>
 
-  <!-- Navigation (Centered using flex-1) -->
   <nav class="flex flex-col items-start w-full flex-1 justify-center space-y-2 mt-2 ">
 
     <a *ngIf="user.roleName== 'ROLE_ADMIN'" routerLink="/dashboard" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
@@ -36,11 +35,11 @@
       <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Users</span>
     </a>
     <a *ngIf="user.roleName== 'ROLE_ADMIN'" routerLink="/sections" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
-<img src="/section.png" class=" w-5 h-5 transition-all duration-300 group-hover:translate-x-1">
+    <img src="/section.png" class=" w-5 h-5 transition-all duration-300 group-hover:translate-x-1">
       <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Sections</span>
     </a>
 
-    <a routerLink="/footages" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
+    <a *ngIf="user.roleName== 'ROLE_SECURITY_AGENT'"  routerLink="/footages" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
       <span class="material-icons text-xl transition-all duration-300 group-hover:translate-x-1">camera</span>
       <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Footage</span>
     </a>
@@ -50,7 +49,7 @@
       <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Log Reports</span>
     </a>
 
-    <a routerLink="/alerts" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
+    <a *ngIf="user.roleName== 'ROLE_SECURITY_AGENT'" routerLink="/alerts" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
       <span class="material-icons text-xl transition-all duration-300 group-hover:translate-x-1">notifications</span>
       <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Alerts</span>
     </a>

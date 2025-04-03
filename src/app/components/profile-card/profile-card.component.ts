@@ -49,7 +49,7 @@ export class ProfileCardComponent implements OnInit {
         this.userId = decoded.sub;
         console.log('Extracted user ID from token:', this.userId);
 
-        this.http.get(`http://localhost:8080/api/users/${this.userId}`)
+        this.http.get(`http://localhost:8080/api/profile/${this.userId}`)
           .subscribe({
             next: data => {
               this.user = data;
@@ -112,7 +112,7 @@ export class ProfileCardComponent implements OnInit {
 
     console.log("Sending update request:", payload);
 
-    this.http.patch(`http://localhost:8080/api/users/${this.userId}`, payload)
+    this.http.patch(`http://localhost:8080/api/profile/${this.userId}`, payload)
       .subscribe({
         next: (response) => {
           console.log('User updated successfully:', response);
@@ -155,7 +155,6 @@ export class ProfileCardComponent implements OnInit {
             this.phoneError = '';
           }
 
-          // ✅ Hide success alert on failure (just to be safe)
           this.showSuccessAlert = false;
         }
       });
@@ -169,20 +168,19 @@ export class ProfileCardComponent implements OnInit {
     const formData = new FormData();
     formData.append("file", file);
 
-    this.http.put(`http://localhost:8080/api/users/${this.userId}/profile-image`, formData, { responseType: 'text' }) // Expect text response
+    this.http.put(`http://localhost:8080/api/profile/${this.userId}/profile-image`, formData, { responseType: 'text' }) // Expect text response
       .subscribe({
         next: (response) => {
           console.log("Profile image updated successfully:", response);
-          this.loadProfileImage(); // Refresh image
+          this.loadProfileImage();
         },
         error: (error) => console.error("Error uploading image:", error)
       });
   }
 
 
-// Fetch profile image
   loadProfileImage(): void {
-    this.http.get(`http://localhost:8080/api/users/${this.userId}/profile-image`, { responseType: 'blob' })
+    this.http.get(`http://localhost:8080/api/profile/${this.userId}/profile-image`, { responseType: 'blob' })
       .subscribe({
         next: (imageBlob) => {
           const reader = new FileReader();

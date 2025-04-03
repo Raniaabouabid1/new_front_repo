@@ -17,11 +17,12 @@ export interface IUser {
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8080/api/users';  // Your API URL for users
+  private apiUrl = 'http://localhost:8080/api/users';
 
   constructor(private http: HttpClient) {}
 
   getUsers(page: number, size: number, fullName?: string, role?: string, searchEmail?: string): Observable<any> {
+    const token = localStorage.getItem('jwt'); // or sessionStorage
     const params = new HttpParams()
       .set('page', page)
       .set('size', size)
@@ -29,41 +30,45 @@ export class UserService {
       .set('searchEmail', searchEmail || '')
       .set('role', role || '');
 
-    return this.http.get<any>(this.apiUrl, { params });
+    const headers = {
+      Authorization: `Bearer ${token}`
+
+    };
+    console.log("my token wehgfwegfyuw: ", token);
+
+    return this.http.get<any>(this.apiUrl, {params, headers});
   }
-
-
-  /*// Accept optional query params
-  getUsers(paramsObj?: any): Observable<IUser[]> {
-    let params = new HttpParams();
-    if (paramsObj) {
-      Object.keys(paramsObj).forEach(key => {
-        if (paramsObj[key]) {
-          params = params.append(key, paramsObj[key]);
-        }
-      });
-    }
-    return this.http.get<IUser[]>(this.apiUrl, { params });
-  }*/
-
   deleteUser(userId: number | undefined): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${userId}`); // Delete user by ID
+    const token = localStorage.getItem('jwt');
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+
+    return this.http.delete<IUser>(`${this.apiUrl}/${userId}`, { headers });
   }
 
-// Example in your UserService:
   addUser(user: IUser): Observable<IUser> {
-    return this.http.post<IUser>(this.apiUrl, user, {
-      headers: { 'Content-Type': 'application/json' }
-    });
+    const token = localStorage.getItem('jwt');
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+    return this.http.post<IUser>(`${this.apiUrl}`, user, { headers });
   }
 
   updateUser(user: IUser): Observable<IUser> {
-    return this.http.put<IUser>(`${this.apiUrl}/${user.id}`, user, {
-      headers: { 'Content-Type': 'application/json' }
-    });
+    const token = localStorage.getItem('jwt');
 
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+
+    return this.http.put<IUser>(`${this.apiUrl}/${user.id}`, user, { headers });
   }
-
 }
 
 

@@ -69,12 +69,17 @@ export class SectionsComponent implements OnInit {
   }
 
   confirmDeleteSection(): void {
-    this.http.delete(`http://localhost:8080/api/sections/${this.sectionToDelete.id}`).subscribe({
+    const token = localStorage.getItem('jwt');
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+    this.http.delete(`http://localhost:8080/api/sections/${this.sectionToDelete.id}`,{headers}).subscribe({
       next: () => {
         this.fetchSections();
         this.showSuccessAlert = true;
         this.showDeleteModal = false; // only hide modal here
-        // ⚠️ Do NOT reset sectionToDelete yet — wait for alert to close
       },
       error: (error) => {
         this.showErrorAlert = true;
@@ -88,13 +93,19 @@ export class SectionsComponent implements OnInit {
 
 
   fetchSections(): void {
+    const token = localStorage.getItem('jwt');
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
     const params = new HttpParams()
       .set('page', this.currentPage)
       .set('size', this.pageSize)
       .set('name', this.name)
       .set('coordinates', this.coordinates);
 
-    this.http.get<any>('http://localhost:8080/api/sections', { params }).subscribe({
+    this.http.get<any>('http://localhost:8080/api/sections', { params,headers }).subscribe({
       next: (data) => {
         this.sections = data.content;
         this.totalPages = data.totalPages;
@@ -122,7 +133,7 @@ export class SectionsComponent implements OnInit {
   openAddModal(): void {
     this.selectedSection = { name: '', coordinates: '', userIds: [], cameraIds: [] };
     this.modalMode = 'add';
-    this.loadUsers(); // Only unassigned users
+    this.loadUsers();
     this.isModalOpen = true;
     this.loadCameras();
   }
@@ -136,12 +147,12 @@ export class SectionsComponent implements OnInit {
       name: section.name,
       coordinates: section.coordinates,
       userIds: section.users?.map((u: any) => u.id) || [],
-      cameraIds: section.cameras?.map((c: any) => c.id) || [] // <== this is probably empty
+      cameraIds: section.cameras?.map((c: any) => c.id) || []
     };
 
     this.modalMode = 'edit';
     this.loadUsers(section.id);
-    this.loadCameras(section.id); // <- make sure this call loads assigned + unassigned
+    this.loadCameras(section.id);
     this.isModalOpen = true;
   }
 
@@ -156,9 +167,9 @@ export class SectionsComponent implements OnInit {
       cameraIds: section.cameras?.map((c: any) => c.id) || [],
     };
 
-    this.modalMode = 'view'; // ✅ Set mode first
-    this.loadUsers(section.id);    // fetch only assigned users
-    this.loadCameras(section.id);  // fetch only assigned cameras
+    this.modalMode = 'view';
+    this.loadUsers(section.id);
+    this.loadCameras(section.id);
     this.isModalOpen = true;
   }
 
@@ -170,16 +181,21 @@ export class SectionsComponent implements OnInit {
 
 
   saveSection(section: any): void {
-    // Reset all alerts first
+    const token = localStorage.getItem('jwt');
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
     this.showSuccessAddAlert = false;
     this.showErrorAddAlert = false;
     this.showSuccessAlert = false;
     this.showErrorAlert = false;
 
     if (this.modalMode === 'add') {
-      this.http.post('http://localhost:8080/api/sections', section).subscribe({
+      this.http.post('http://localhost:8080/api/sections', section,{headers}).subscribe({
         next: () => {
-          this.fetchSections(); // ✅ Refresh data
+          this.fetchSections();
           this.showSuccessAddAlert = true;
           this.isModalOpen = false;
         },
@@ -189,7 +205,7 @@ export class SectionsComponent implements OnInit {
         }
       });
     } else {
-      this.http.patch(`http://localhost:8080/api/sections/${section.id}`, section).subscribe({
+      this.http.put(`http://localhost:8080/api/sections/${section.id}`, section, {headers}).subscribe({
         next: () => {
           this.fetchSections(); // ✅ Refresh data
           this.isModalOpen = false;
@@ -205,18 +221,24 @@ export class SectionsComponent implements OnInit {
 
 
   private loadUsers(sectionId?: string) {
+    const token = localStorage.getItem('jwt');
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
     if (this.modalMode === 'view' && sectionId) {
-      this.http.get<any>(`http://localhost:8080/api/users/assigned-to-section/${sectionId}`).subscribe({
+      this.http.get<any>(`http://localhost:8080/api/users/assigned-to-section/${sectionId}`,{headers}).subscribe({
         next: (data) => this.allUsers = data,
         error: (err) => console.error("❌ Error loading assigned users", err)
       });
     } else if (sectionId) {
-      this.http.get<any>(`http://localhost:8080/api/users/for-section/${sectionId}`).subscribe({
+      this.http.get<any>(`http://localhost:8080/api/users/for-section/${sectionId}`, {headers}).subscribe({
         next: (data) => this.allUsers = data,
         error: (err) => console.error("❌ Error loading all related users", err)
       });
     } else {
-      this.http.get<any>('http://localhost:8080/api/users/unassigned').subscribe({
+      this.http.get<any>('http://localhost:8080/api/users/unassigned', {headers}).subscribe({
         next: (data) => this.allUsers = data,
         error: (err) => console.error("❌ Error loading unassigned users", err)
       });
@@ -227,18 +249,25 @@ export class SectionsComponent implements OnInit {
 
 
   private loadCameras(sectionId?: string) {
+    const token = localStorage.getItem('jwt');
+
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+
     if (this.modalMode === 'view' && sectionId) {
-      this.http.get<any>(`http://localhost:8080/api/cameras/assigned-to-section/${sectionId}`).subscribe({
+      this.http.get<any>(`http://localhost:8080/api/cameras/assigned-to-section/${sectionId}`, {headers}).subscribe({
         next: (data) => this.allCameras = data,
         error: (err) => console.error("❌ Error loading assigned cameras", err)
       });
     } else if (sectionId) {
-      this.http.get<any>(`http://localhost:8080/api/cameras/for-section/${sectionId}`).subscribe({
+      this.http.get<any>(`http://localhost:8080/api/cameras/for-section/${sectionId}`,{headers}).subscribe({
         next: (data) => this.allCameras = data,
         error: (err) => console.error("❌ Error loading all related cameras", err)
       });
     } else {
-      this.http.get<any>('http://localhost:8080/api/cameras/unassigned').subscribe({
+      this.http.get<any>('http://localhost:8080/api/cameras/unassigned',{headers}).subscribe({
         next: (data) => this.allCameras = data,
         error: (err) => console.error("❌ Error loading unassigned cameras", err)
       });

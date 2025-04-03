@@ -54,6 +54,17 @@ export class SectionModalComponent implements OnInit {
   onSubmit(): void {
     this.submitSection.emit(this.section);
   }
+  toggleUser(userId: string, event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      if (!this.section.userIds.includes(userId)) {
+        this.section.userIds.push(userId);
+      }
+    } else {
+      this.section.userIds = this.section.userIds.filter((id: string) => id !== userId);
+    }
+  }
+
 
   toggleCamera(camId: string, event: Event): void {
     const checkbox = event.target as HTMLInputElement;

@@ -20,18 +20,14 @@ export class LoginService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  // Login function (you can delegate to your existing LoginService if you prefer)
   login(credentials: LoginRequest): Observable<LoginResponse> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    // You can send credentials directly rather than a hardcoded test payload.
     return this.http.post<LoginResponse>(this.loginUrl, credentials, { headers });
   }
 
   // Logout functionality:
   logout(): void {
-    // Remove the token from local storage (or wherever you store it)
     localStorage.removeItem('jwt');
-    // Redirect to the login page
     this.router.navigate(['/login']);
   }
 }

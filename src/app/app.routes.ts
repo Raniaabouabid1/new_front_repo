@@ -9,6 +9,7 @@ import { UsersComponent } from './components/users/users.component';
 import { SectionsComponent} from './components/sections/sections.component';
 import { AuthGuard } from './auth/auth.guard';
 import {LogoutComponent} from './components/lougout/logout.component';
+/*
 
 export const routes: Routes = [
   {
@@ -41,5 +42,55 @@ export const routes: Routes = [
       { path: '', redirectTo: '/login', pathMatch: 'full' }
       // Other protected routes can be added here.
     ]
+  }
+];
+*/
+
+
+export const routes: Routes = [
+  {
+    path: '',
+    component: LoginLayoutComponent,
+    children: [
+      { path: 'login', component: LogintestComponent },
+      { path: '', redirectTo: 'login', pathMatch: 'full' }
+    ]
+  },
+  {
+    path: '',
+    component: LogoutComponent,
+    children: [
+      { path: 'logout', component: LogoutComponent }
+    ]
+  },
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { path: 'profile', component: ProfileCardComponent, canActivate: [AuthGuard] },
+      { path: 'footages', component: SurveillanceFootageComponent, canActivate: [AuthGuard] },
+
+      // 🚫 Only ADMIN can access users
+      {
+        path: 'users',
+        component: UsersComponent,
+        canActivate: [AuthGuard],
+        data: { expectedRoles: ['ROLE_ADMIN'] }
+      },
+
+      // ✅ ADMIN and SECURITY_AGENT can access sections
+      {
+        path: 'sections',
+        component: SectionsComponent,
+        canActivate: [AuthGuard],
+        data: { expectedRoles: ['ROLE_ADMIN', 'ROLE_SECURITY_AGENT'] }
+      },
+
+      { path: '', redirectTo: '/login', pathMatch: 'full' }
+    ]
+  },
+  {
+    path: 'unauthorized',
+    loadComponent: () => import('./components/unauthorized/unauthorized.component').then(m => m.UnauthorizedComponent)
   }
 ];

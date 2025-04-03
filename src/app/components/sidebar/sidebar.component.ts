@@ -37,7 +37,7 @@ export class SidebarComponent implements OnInit{
         const decoded = jwtDecode<JwtPayload>(token);
         this.userId = decoded.sub;
         console.log('Extracted user ID from token:', this.userId);
-        this.http.get(`http://localhost:8080/api/users/${this.userId}`)
+        this.http.get(`http://localhost:8080/api/profile/${this.userId}`)
           .subscribe({
             next: data => {
               this.user = data;
@@ -61,7 +61,7 @@ export class SidebarComponent implements OnInit{
   }
 
   loadProfileImage(): void {
-    this.http.get(`http://localhost:8080/api/users/${this.userId}/profile-image`, { responseType: 'blob' })
+    this.http.get(`http://localhost:8080/api/profile/${this.userId}/profile-image`, { responseType: 'blob' })
       .subscribe({
         next: (imageBlob) => {
           const reader = new FileReader();

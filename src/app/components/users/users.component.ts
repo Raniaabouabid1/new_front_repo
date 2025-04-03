@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './users.component.service';  // Correct service import
 import { IUser } from './users.component.service';
-import {DatePipe, NgForOf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgTemplateOutlet} from '@angular/common';
+import {DatePipe, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, NgTemplateOutlet} from '@angular/common';
 import {DeleteUserModalComponent} from '../delete-user-modal/delete-user-modal.component';
 import {FormsModule} from '@angular/forms';
 import {UserModalComponent} from '../user-modal/user-modal.component';
@@ -21,6 +21,7 @@ import {UsersPaginationComponent} from '../users-pagination/users-pagination.com
     UserModalComponent,
     DeleteUserModalComponent,
     UsersPaginationComponent,
+    NgIf,
   ],
   styleUrls: ['./users.component.css']
 })
@@ -36,6 +37,10 @@ export class UsersComponent implements OnInit {
   currentPage = 0;
   pageSize = 5;
   totalPages = 0;
+  showSuccessAddAlert : boolean = false;
+  showErrorAddAlert : boolean = false;
+  showSuccessDeleteAlert : boolean = false;
+  showErrorDeleteAlert : boolean = false;
 
 
 
@@ -50,11 +55,13 @@ export class UsersComponent implements OnInit {
 
 
   openUserModal(): void {
-    // When adding a user, set mode to 'add' and clear selectedUser.
     this.modalMode = 'add';
     this.selectedUser = null;
+    this.showSuccessAddAlert = false;
+    this.showErrorAddAlert = false;
     this.showUserModal = true;
   }
+
 
   openViewModal(user: IUser): void {
     this.modalMode = 'view';
@@ -78,24 +85,34 @@ export class UsersComponent implements OnInit {
       this.userService.addUser(formData).subscribe(
         (response: IUser) => {
           this.users.push(response);
+          this.showSuccessAddAlert = true; // ✅ show success
+          this.showErrorAddAlert = false;
           this.closeUserModal();
+          setTimeout(() => this.showSuccessAddAlert = false, 4000); // auto-hide
         },
-        error => { console.error('Error adding user', error); }
+        error => {
+          console.error('Error adding user', error);
+          this.showErrorAddAlert = true; // ❌ show error
+          this.showSuccessAddAlert = false;
+          setTimeout(() => this.showErrorAddAlert = false, 4000); // auto-hide
+        }
       );
     } else if (this.modalMode === 'edit') {
       this.userService.updateUser(formData).subscribe(
         (response: IUser) => {
           const index = this.users.findIndex(u => u.id === response.id);
-          if (index > -1) {
-            this.users[index] = response;
-          }
+          if (index > -1) this.users[index] = response;
           this.closeUserModal();
         },
-        error => { console.error('Error updating user', error); }
+        error => {
+          console.error('Error updating user', error);
+          this.showErrorAddAlert = true;
+          setTimeout(() => this.showErrorAddAlert = false, 4000);
+        }
       );
     }
+  }
 
-}
 
   loadUsers(): void {
     this.userService.getUsers(this.currentPage, this.pageSize, this.fullName, this.role, this.searchEmail)
@@ -137,18 +154,26 @@ export class UsersComponent implements OnInit {
   // Called when user confirms deletion
 
   confirmDelete(): void {
-    if (!this.selectedUser) {
-      return;
-    }
-    // Call service to delete the user
-    this.userService.deleteUser(this.selectedUser.id).subscribe(() => {
-      // Refresh the list or remove user from 'users' array
-      this.users = this.users.filter(u => u.id !== this.selectedUser?.id);
+    if (!this.selectedUser) return;
 
-      // Close the modal
-      this.closeDeleteModal();
+    this.userService.deleteUser(this.selectedUser.id).subscribe({
+      next: () => {
+        this.users = this.users.filter(u => u.id !== this.selectedUser?.id);
+        this.showSuccessDeleteAlert = true; // ✅
+        this.showErrorDeleteAlert = false;
+        this.closeDeleteModal();
+        setTimeout(() => this.showSuccessDeleteAlert = false, 4000);
+      },
+      error: (err) => {
+        console.error("❌ Error deleting user", err);
+        this.showErrorDeleteAlert = true;
+        this.showSuccessDeleteAlert = false;
+        this.closeDeleteModal();
+        setTimeout(() => this.showErrorDeleteAlert = false, 4000);
+      }
     });
   }
+
 }
 
 
