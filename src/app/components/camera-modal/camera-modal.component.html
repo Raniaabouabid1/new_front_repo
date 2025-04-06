@@ -1,0 +1,67 @@
+<div *ngIf="show" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-3xl">
+    <!-- Header -->
+    <div class="flex items-center justify-between p-4 border-b">
+      <h3 class="text-2xl font-semibold">Add a New Camera</h3>
+      <button (click)="onClose()" class="text-gray-500 hover:text-red-600">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div class="p-6 max-h-[75vh] overflow-y-auto">
+      <form #cameraForm="ngForm" (ngSubmit)="onSubmit()">
+        <!-- Camera Name -->
+        <div class="mb-4">
+          <label class="block font-medium mb-1">Camera Name</label>
+          <input
+            type="text"
+            name="name"
+            required
+            [(ngModel)]="camera.name"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label class="block font-medium mb-1">Camera IP Address</label>
+          <input
+            type="text"
+            name="ipAddress"
+            [(ngModel)]="camera.ipAddress"
+            placeholder="e.g. 192.168.1.100"
+            [readonly]="mode === 'view'"
+            class="w-full border p-2 rounded"
+          />
+        </div>
+
+        <!-- Section Dropdown -->
+        <div class="mb-4">
+          <label class="block font-medium mb-1">Assign to Section</label>
+          <select
+            [(ngModel)]="camera.sectionId"
+            name="sectionId"
+            class="w-full border p-2 rounded"
+          >
+            <option [value]="null">-- Unassigned --</option>
+            <option *ngFor="let section of allSections" [value]="section.id">
+              {{ section.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Submit + Cancel Buttons -->
+        <div class="flex justify-end space-x-4 mt-6">
+          <button type="submit" class="bg-[#313863] text-white px-6 py-2 rounded hover:bg-[#4b5499]">
+            Add Camera
+          </button>
+          <button
+            type="button"
+            (click)="onClose()"
+            class="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-700"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

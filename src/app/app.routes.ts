@@ -9,6 +9,7 @@ import { UsersComponent } from './components/users/users.component';
 import { SectionsComponent} from './components/sections/sections.component';
 import { AuthGuard } from './auth/auth.guard';
 import {LogoutComponent} from './components/lougout/logout.component';
+import {CamerasComponent} from './components/cameras/cameras.component';
 /*
 
 export const routes: Routes = [
@@ -74,6 +75,12 @@ export const routes: Routes = [
       {
         path: 'users',
         component: UsersComponent,
+        canActivate: [AuthGuard],
+        data: { expectedRoles: ['ROLE_ADMIN'] }
+      },
+      {
+        path: 'cameras',
+        component: CamerasComponent,
         canActivate: [AuthGuard],
         data: { expectedRoles: ['ROLE_ADMIN'] }
       },

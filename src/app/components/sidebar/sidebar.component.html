@@ -32,11 +32,15 @@
 
     <a *ngIf="user.roleName== 'ROLE_ADMIN'" routerLink="/users" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
       <span class="material-icons text-xl transition-all duration-300 group-hover:translate-x-1">groups</span>
-      <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Users</span>
+      <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Users Managments</span>
     </a>
     <a *ngIf="user.roleName== 'ROLE_ADMIN'" routerLink="/sections" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
     <img src="/section.png" class=" w-5 h-5 transition-all duration-300 group-hover:translate-x-1">
-      <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Sections</span>
+      <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Sections Management</span>
+    </a>
+    <a *ngIf="user.roleName== 'ROLE_ADMIN'" routerLink="/cameras" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">
+      <span class="material-icons text-xl transition-all duration-300 group-hover:translate-x-1">videocam</span>
+      <span class="ml-4 text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 group-hover:translate-x-1">Cameras Management</span>
     </a>
 
     <a *ngIf="user.roleName== 'ROLE_SECURITY_AGENT'"  routerLink="/footages" class="flex items-center px-6 py-3 text-[#FFFFFF] hover:bg-[#464667] rounded-l-3xl rounded-r-3xl w-full transition-all duration-300 group">

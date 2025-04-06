@@ -1,10 +1,11 @@
+<!--
 
 <div class="flex h-screen">
-  <!-- Sidebar -->
-  <!-- Main Content -->
+  &lt;!&ndash; Sidebar &ndash;&gt;
+  &lt;!&ndash; Main Content &ndash;&gt;
   <div class="py-4 px-16 flex-1 flex flex-col  overflow-y-auto">
 
-    <!-- Filters -->
+    &lt;!&ndash; Filters &ndash;&gt;
     <div class="flex justify-center space-x-4 mb-6">
       <button *ngFor="let category of categories"
               (click)="filterCategory(category)"
@@ -15,42 +16,42 @@
       </button>
     </div>
 
-    <!-- Card Wrapper for Aesthetic Look -->
+    &lt;!&ndash; Card Wrapper for Aesthetic Look &ndash;&gt;
     <div class="shadow-2xl rounded-lg bg-white">
 
-      <!-- Footage Sections (Each Section is a Carousel) -->
+      &lt;!&ndash; Footage Sections (Each Section is a Carousel) &ndash;&gt;
       <div *ngFor="let section of filteredFootage" class="px-10 mb-12">
         <h2 class="text-xl font-semibold mb-4">{{ section.name }}</h2>
 
-        <!-- Carousel Wrapper -->
+        &lt;!&ndash; Carousel Wrapper &ndash;&gt;
         <div class="relative flex justify-center">
           <div class="overflow-hidden">
             <div class="flex gap-4 transition-transform duration-300"
                  [style.transform]="'translateX(-' + carouselPosition[section.name] + 'px)'">
 
-              <!-- Camera Card -->
+              &lt;!&ndash; Camera Card &ndash;&gt;
               <div *ngFor="let camera of section.cameras"
                    class="min-w-[400px] max-w-[600px] bg-black rounded-xl overflow-hidden shadow-lg flex-shrink-0">
 
-                <!-- Live Video Feed -->
+                &lt;!&ndash; Live Video Feed &ndash;&gt;
                 <video class="w-full h-48 object-cover opacity-90" autoplay muted loop>
                   <source [src]="camera.liveFeedUrl" type="video/mp4">
                   Your browser does not support live video.
                 </video>
 
-                <!-- Overlay Icons -->
+                &lt;!&ndash; Overlay Icons &ndash;&gt;
                 <div class="absolute top-2 left-2 flex space-x-2">
                   <span class="material-icons text-white text-sm">wifi</span>
                 </div>
                 <div class="absolute top-2 right-2 text-white text-sm font-semibold">{{ camera.viewers }}</div>
 
-                <!-- Camera Info -->
+                &lt;!&ndash; Camera Info &ndash;&gt;
                 <div class="absolute bottom-2 left-2 text-white text-xs">
                   <p class="font-semibold">{{ camera.name }}</p>
                   <p>{{ camera.date }} &bull; {{ camera.time }}</p>
                 </div>
 
-                <!-- Menu Icon -->
+                &lt;!&ndash; Menu Icon &ndash;&gt;
                 <button class="absolute top-2 right-2 text-white text-sm">
                   <span class="material-icons">more_vert</span>
                 </button>
@@ -59,12 +60,27 @@
             </div>
           </div>
 
-          <!-- Navigation Buttons -->
+          &lt;!&ndash; Navigation Buttons &ndash;&gt;
           <button class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full" (click)="prevSlide(section.name)">‹</button>
           <button class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full" (click)="nextSlide(section.name)">›</button>
         </div>
 
       </div>
     </div>
+  </div>
+</div>
+-->
+
+<!-- footages.component.html -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
+  <div *ngFor="let cam of cameras" class="border p-4 rounded shadow">
+    <h2 class="text-lg font-semibold mb-2">{{ cam.name }}</h2>
+    <p class="text-sm text-gray-600 mb-2">IP: {{ cam.lastKnownIp }}</p>
+    <img
+      [src]="getStreamUrl(cam)"
+      alt="Live Feed"
+      class="w-full h-auto border"
+      style="max-height: 400px"
+    />
   </div>
 </div>

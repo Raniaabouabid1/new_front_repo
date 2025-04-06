@@ -1,0 +1,76 @@
+<div class="flex h-screen" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+
+  <div class="w-full max-w-7xl px-7 pt-5 overflow-auto">
+    <section class="px-7 py-4 pr-8  flex justify-between items-center">
+      <h2 class="text-3xl font-medium text-gray-800">List of Cameras</h2>
+      <button  class="py-2 px-3 bg-[#313863] text-white rounded-lg" (click)="openAddModal()">
+        + Add a new Camera
+      </button>
+    </section>
+
+    <section>
+    <form  class=" py-3  px-6 flex gap-4 items-center">
+      <div class="flex border border-gray-300 rounded-md shadow-sm">
+        <input type="text" name="name" placeholder="Search by  camera name"
+               class="block w-full rounded py-2 px-3 text-sm" />
+      </div>
+      <button type="submit" class="px-2 hover:opacity-80">
+        <img src="/seach.png" alt="search" class="h-6 w-6">
+      </button>
+      <button type="button" class="px-2 hover:opacity-80">
+        <img src="/reset.png" alt="reset" class="h-6 w-6">
+      </button>
+    </form>
+
+  </section>
+    <div class=" px-7 ">
+      <table class="px-7 py-4 pt-5 w-full border-collapse border border-gray-200 shadow-sm rounded-lg overflow-hidden">
+        <thead class="bg-[#2e2e48] text-white">
+        <tr>
+          <th class="p-4 text-left"></th>
+          <th class="p-4 text-left">Camera ID</th>
+          <th class="p-4 text-left">Camera name</th>
+          <th class="p-4 text-left">Camera Token</th>
+          <th class="p-4 text-left">last known IP address</th>
+          <th class="p-4 text-left">Belongs to Section</th>
+          <th class="p-4 text-left">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr  *ngFor="let cam of cameras" class="bg-gray-100 hover:bg-gray-200 transition-all">
+          <td class="p-4 text-left">
+            <button  class="hover:opacity-80 viewBtns" type="button" (click)="openViewModal(cam)">
+              <img src="/eye.png" alt="view" class="h-6 w-6" />
+            </button>
+          </td>
+          <td class="p-4">{{cam.id}}</td>
+          <td class="p-4">{{cam.name}}</td>
+          <td class="p-4">{{cam.streamToken}}</td>
+          <td class="p-4">{{cam.lastKnownIp}}</td>
+          <td class="p-4">{{ cam.sectionName || 'Not assigned to any section' }}</td>
+          <td>
+            <button  class="hover:opacity-80 editBtns" type="button" (click)="openEditModal(cam)">
+              <img src="/edit.png" alt="Edit" class="h-6 w-6" />
+            </button>
+            <!-- Delete Button -->
+            <button class="hover:opacity-80 deleteBtns">
+              <img src="/trash.png" alt="Supprimer" class="h-6 w-6" />
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<app-camera-modal
+  [show]="isCameraModalOpen"
+  [mode]="modalMode"
+  [allSections]="sections"
+  (close)="closeCameraModal()"
+  (cameraAdded)="loadCameras()">
+</app-camera-modal>
+
+
+
+
