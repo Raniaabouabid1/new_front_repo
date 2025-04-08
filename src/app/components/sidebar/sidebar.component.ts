@@ -3,7 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import { LoginService } from '../logintest/logintest.component.service';
 import {jwtDecode} from 'jwt-decode';
 import {RouterLink} from '@angular/router';
-import {NgIf} from '@angular/common';
+import {NgIf, NgSwitch, NgSwitchCase} from '@angular/common';
 
 interface JwtPayload {
   sub: string;
@@ -15,7 +15,9 @@ interface JwtPayload {
   standalone: true,
   imports: [
     RouterLink,
-    NgIf
+    NgIf,
+    NgSwitchCase,
+    NgSwitch
   ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']

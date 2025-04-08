@@ -111,13 +111,15 @@ export class CamerasComponent implements OnInit {
     const streamToken = camera.streamToken || this.generateStreamToken(camera.name);
     const ipAddress = window.location.hostname; // detects local IP (best-effort)
     const streamUrl = `http://${ipAddress}:4747/video`;
+    const flaskPort = camera.flaskPort;
 
     // 👉 Step 2: Add fields to camera object
     const payload = {
       ...camera,
       streamToken,
       ipAddress,
-      streamUrl
+      streamUrl,
+      flaskPort
     };
 
     if (this.modalMode === 'add') {

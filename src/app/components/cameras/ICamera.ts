@@ -6,4 +6,5 @@ export interface ICamera {
   streamToken?: string;
   lastKnownIp?: string;
   sectionName?: string;
+  flaskPort?: number;
 }

@@ -1,5 +1,3 @@
-// ✅ UPDATED CAMERA MODAL TO ADD CAMERA + AUTO REGISTER BACKEND + START FLASK STREAM
-
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { NgIf, NgForOf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   standalone: true,
   imports: [NgIf, NgForOf, FormsModule],
   templateUrl: './camera-modal.component.html',
-  styleUrls: ['./camera-modal.component.scss']
+  styleUrls: ['./camera-modal.component.css']
 })
 export class CameraModalComponent implements OnInit {
   @Input() show: boolean = false;
@@ -18,12 +16,13 @@ export class CameraModalComponent implements OnInit {
   @Input() allSections: any[] = [];
 
   @Output() close = new EventEmitter<void>();
-  @Output() cameraAdded = new EventEmitter<void>();
+  @Output() cameraAdded = new EventEmitter<any>(); // send camera data back to parent
 
   camera: any = {
     name: '',
     sectionId: null,
-    ipAddress: ''
+    ipAddress: '',
+    flaskPort: '',
   };
 
   constructor(private http: HttpClient) {}
@@ -38,11 +37,12 @@ export class CameraModalComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
-    if (!this.camera.name) return;
+    if (!this.camera.name || !this.camera.flaskPort) {
+      alert("Please enter camera name and port!");
+      return;
+    }
 
     const token = this.generateStreamToken(this.camera.name);
-
-    // 📡 Detect local IP using a public STUN API or let Python detect it
     const ip = this.camera.ipAddress || window.location.hostname;
     const streamUrl = `http://${ip}:4747/video`;
 
@@ -50,8 +50,9 @@ export class CameraModalComponent implements OnInit {
       name: this.camera.name,
       streamToken: token,
       ipAddress: ip,
-      streamUrl: streamUrl,
-      sectionId: this.camera.sectionId
+      streamUrl,
+      sectionId: this.camera.sectionId,
+      flaskPort: this.camera.flaskPort,
     };
 
     console.log('📤 Sending camera registration payload:', payload);
@@ -59,7 +60,7 @@ export class CameraModalComponent implements OnInit {
     this.http.post('http://localhost:8080/api/cameras', payload).subscribe({
       next: (res: any) => {
         console.log('✅ Camera registered successfully:', res);
-        this.cameraAdded.emit();
+        this.cameraAdded.emit(payload); // emit full camera info back
         this.close.emit();
       },
       error: (err) => console.error('❌ Failed to register camera:', err)
@@ -73,16 +74,5 @@ export class CameraModalComponent implements OnInit {
 
   onClose(): void {
     this.close.emit();
-  }
-
-  private async detectLocalIp(): Promise<string> {
-    try {
-      const response = await fetch('https://api64.ipify.org?format=json');
-      const data = await response.json();
-      return data.ip;
-    } catch (error) {
-      console.warn("⚠️ Could not detect external IP, defaulting to localhost");
-      return 'localhost';
-    }
   }
 }

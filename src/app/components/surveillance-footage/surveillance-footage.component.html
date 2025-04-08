@@ -75,7 +75,9 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-6">
   <div *ngFor="let cam of cameras" class="border p-4 rounded shadow">
     <h2 class="text-lg font-semibold mb-2">{{ cam.name }}</h2>
+
     <p class="text-sm text-gray-600 mb-2">IP: {{ cam.lastKnownIp }}</p>
+    <p class="text-sm text-gray-600 mb-2">IP: {{getStreamUrl(cam)}} </p>
     <img
       [src]="getStreamUrl(cam)"
       alt="Live Feed"

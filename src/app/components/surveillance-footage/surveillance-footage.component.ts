@@ -32,6 +32,9 @@ export class SurveillanceFootageComponent implements OnInit {
   }
 
   getStreamUrl(cam: any): string {
-    return `http://${cam.lastKnownIp}:4747/video`;
+    console.log(`[🎯 STREAM LINK] http://localhost:${cam.flaskPort}/stream/${cam.streamToken}`);
+    return `http://localhost:${cam.flaskPort}/stream/${cam.streamToken}`;
   }
+
+
 }

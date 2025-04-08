@@ -1,13 +1,13 @@
 <div class="max-h-screen flex flex-col">
   <!-- Main Content -->
   <div class="flex flex-1 items-center justify-center">
-    <div class="w-full max-w-7xl bg-white text-gray-800 rounded-lg py-6 sm:p-8 shadow-2xl">
+    <div class="w-full max-w-7xl bg-white text-gray-800 rounded-lg py-8 px-8">
       <!-- Profile Header -->
-      <div class="flex flex-wrap items-center justify-between border-b pb-4">
+      <div class="flex flex-wrap items-center justify-between border-b pb-8">
         <div class="flex items-center gap-4">
           <div class="relative w-20 h-20">
             <img [src]="user.profileImage ? user.profileImage : '/avatar.svg'" alt="Profile Picture"
-                 class="w-full h-full rounded-full border-2 border-blue-500" />
+                 class="w-full h-full rounded-full border-3 border-blue-800" />
             <!-- File Upload Input (Hidden) -->
             <input type="file" #fileInput accept="image/*" (change)="uploadProfileImage($event)" hidden>
             <!-- Plus Icon (Click to trigger file selection) -->
@@ -21,9 +21,14 @@
               {{ user.firstName }} {{ user.lastName }}
             </h2>
             <p class="text-sm text-gray-600">{{ user.email }}</p>
-            <span class="inline-block bg-red-600 text-xs px-3 py-1 rounded mt-1 text-white">
-              {{ user.roleName }}
+            <div [ngSwitch]="user.roleName">
+            <span *ngSwitchCase="'ROLE_SECURITY_AGENT'" class="inline-block bg-red-600 text-xs px-3 py-1 rounded mt-1 text-white">
+                  Security Agent
             </span>
+              <span *ngSwitchCase="'ROLE_ADMIN'" class="inline-block bg-red-600 text-xs px-3 py-1 rounded mt-1 text-white">
+                Administrator
+            </span>
+            </div>
           </div>
         </div>
       </div>
