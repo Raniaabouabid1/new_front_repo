@@ -1,4 +1,3 @@
-// auth.guard.ts
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import {jwtDecode} from 'jwt-decode';
@@ -22,14 +21,12 @@ export class AuthGuard implements CanActivate {
     const expectedRoles = next.data['expectedRoles'];
     if (expectedRoles && expectedRoles.length > 0) {
       const decoded: any = jwtDecode(token);
-      const userRole = decoded.role; // assumes `role` is in your JWT
-      console.log('Decoded role:', userRole);
+      const userRole = decoded.role;
       if (!expectedRoles.includes(userRole)) {
-        this.router.navigate(['/unauthorized']); // fallback page
+        this.router.navigate(['/unauthorized']);
         return false;
       }
     }
-
     return true;
   }
 }

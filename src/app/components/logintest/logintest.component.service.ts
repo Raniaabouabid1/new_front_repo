@@ -24,8 +24,6 @@ export class LoginService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post<LoginResponse>(this.loginUrl, credentials, { headers });
   }
-
-  // Logout functionality:
   logout(): void {
     localStorage.removeItem('jwt');
     this.router.navigate(['/login']);

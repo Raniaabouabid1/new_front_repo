@@ -38,7 +38,6 @@ export class SidebarComponent implements OnInit{
       try {
         const decoded = jwtDecode<JwtPayload>(token);
         this.userId = decoded.sub;
-        console.log('Extracted user ID from token:', this.userId);
         this.http.get(`http://localhost:8080/api/profile/${this.userId}`)
           .subscribe({
             next: data => {
@@ -66,16 +65,23 @@ export class SidebarComponent implements OnInit{
     this.http.get(`http://localhost:8080/api/profile/${this.userId}/profile-image`, { responseType: 'blob' })
       .subscribe({
         next: (imageBlob) => {
+          // If the image is empty (0 bytes), treat it as no image
+          if (imageBlob.size === 0) {
+            this.user.profileImage = "/avatar.svg";
+            return;
+          }
+
           const reader = new FileReader();
           reader.onload = () => {
             this.user.profileImage = reader.result as string;
           };
           reader.readAsDataURL(imageBlob);
         },
-        error: () => {
-          console.log("No profile image found, using default.");
+        error: (error) => {
+          // Instead of logging the error, just fallback silently
           this.user.profileImage = "/avatar.svg";
         }
       });
   }
+
 }

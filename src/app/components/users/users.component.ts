@@ -46,8 +46,7 @@ export class UsersComponent implements OnInit {
 
   constructor(private userService: UserService) {}
   ngOnInit(): void {
-    this.loadUsers(); // load users initially without filters
-  }
+    this.loadUsers();   }
   goToPage(page: number): void {
     this.currentPage = page;
     this.loadUsers();
@@ -91,7 +90,6 @@ export class UsersComponent implements OnInit {
           setTimeout(() => this.showSuccessAddAlert = false, 4000); // auto-hide
         },
         error => {
-          console.error('Error adding user', error);
           this.showErrorAddAlert = true; // ❌ show error
           this.showSuccessAddAlert = false;
           setTimeout(() => this.showErrorAddAlert = false, 4000); // auto-hide
@@ -123,13 +121,10 @@ export class UsersComponent implements OnInit {
   }
 
 
-  // Called on form submission
   onSubmit(): void {
-    console.log('Selected role:', this.role);
-    this.loadUsers();
+   this.loadUsers();
   }
 
-  // Optionally, implement reset functionality
   onReset(): void {
     this.fullName = '';
     this.searchEmail = '';
@@ -139,19 +134,15 @@ export class UsersComponent implements OnInit {
   }
 
 
-  // Triggered by clicking the delete button in the table
   openDeleteModal(user: IUser): void {
     this.selectedUser = user;
     this.showDeleteModal = true;
   }
 
-  // Hide the modal
   closeDeleteModal(): void {
     this.showDeleteModal = false;
     this.selectedUser = null;
   }
-
-  // Called when user confirms deletion
 
   confirmDelete(): void {
     if (!this.selectedUser) return;

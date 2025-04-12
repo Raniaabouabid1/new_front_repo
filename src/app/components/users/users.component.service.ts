@@ -34,7 +34,6 @@ export class UserService {
       Authorization: `Bearer ${token}`
 
     };
-    console.log("my token wehgfwegfyuw: ", token);
 
     return this.http.get<any>(this.apiUrl, {params, headers});
   }

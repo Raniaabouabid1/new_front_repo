@@ -47,14 +47,12 @@ export class ProfileCardComponent implements OnInit {
       try {
         const decoded = jwtDecode<JwtPayload>(token);
         this.userId = decoded.sub;
-        console.log('Extracted user ID from token:', this.userId);
 
         this.http.get(`http://localhost:8080/api/profile/${this.userId}`)
           .subscribe({
             next: data => {
               this.user = data;
-              console.log( "profile data"+data.toString());
-              this.loadProfileImage(); // Load profile image after user data
+              this.loadProfileImage();
             },
             error: err => {
               console.error('Error fetching user data:', err);
@@ -105,27 +103,20 @@ export class ProfileCardComponent implements OnInit {
       birthDate: this.user.birthDate,
     };
 
-    // Include password only if provided
     if (this.newPassword && this.confirmPassword) {
       payload.password = this.newPassword;
     }
 
-    console.log("Sending update request:", payload);
 
     this.http.patch(`http://localhost:8080/api/profile/${this.userId}`, payload)
       .subscribe({
         next: (response) => {
-          console.log('User updated successfully:', response);
           this.editMode = false;
           this.newPassword = '';
           this.confirmPassword = '';
           this.emailError = '';
           this.phoneError = '';
-
-          // ✅ Show success alert
           this.showSuccessAlert = true;
-
-          // ✅ Auto-hide the alert after 3 seconds
           setTimeout(() => {
             this.showSuccessAlert = false;
           }, 30000);
@@ -133,8 +124,6 @@ export class ProfileCardComponent implements OnInit {
         error: (error) => {
           console.error('Failed to update user:', error);
           this.showErrorAlert = true;
-
-          // ✅ Auto-hide the alert after 3 seconds
           setTimeout(() => {
             this.showSuccessAlert = false;
           }, 30);
@@ -171,26 +160,30 @@ export class ProfileCardComponent implements OnInit {
     this.http.put(`http://localhost:8080/api/profile/${this.userId}/profile-image`, formData, { responseType: 'text' }) // Expect text response
       .subscribe({
         next: (response) => {
-          console.log("Profile image updated successfully:", response);
           this.loadProfileImage();
         },
         error: (error) => console.error("Error uploading image:", error)
       });
   }
 
-
   loadProfileImage(): void {
     this.http.get(`http://localhost:8080/api/profile/${this.userId}/profile-image`, { responseType: 'blob' })
       .subscribe({
         next: (imageBlob) => {
+          // If the image is empty (0 bytes), treat it as no image
+          if (imageBlob.size === 0) {
+            this.user.profileImage = "/avatar.svg";
+            return;
+          }
+
           const reader = new FileReader();
           reader.onload = () => {
             this.user.profileImage = reader.result as string;
           };
           reader.readAsDataURL(imageBlob);
         },
-        error: () => {
-          console.log("No profile image found, using default.");
+        error: (error) => {
+          // Instead of logging the error, just fallback silently
           this.user.profileImage = "/avatar.svg";
         }
       });
